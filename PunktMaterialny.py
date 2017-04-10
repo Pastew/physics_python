@@ -96,11 +96,14 @@ class PunktMaterialny:
         self.promien = promien
         self.kolor = kolor
 
+        self.sphere = sphere(radius=self.promien,
+                             pos=[self.polozenie.x, self.polozenie.y, self.polozenie.z],
+                             color=[self.kolor.r, self.kolor.g, self.kolor.b])
+
     # Moze lepiej funkcje rysujace oddzielic od fizyki.
     # Ale jakby co to tak mozna narysowac punkt materialny:
-    #def rysuj(self):
-    #    sphere(radius=self.promien,
-    #           pos=[self.polozenie.x, self.polozenie.y, self.polozenie.z])
+    def aktualizuj_pozycje(self):
+        self.sphere.pos = [self.polozenie.x, self.polozenie.y, self.polozenie.z]
 
     def przygotuj_ruch_euler(self, przyspieszenie=Wektor(), krok_czasowy=0.0):
         self.nastepna_predkosc = self.predkosc + przyspieszenie * krok_czasowy
@@ -136,6 +139,10 @@ class PunktMaterialny:
 
     def ustaw_kolor(self, kolor=Kolor()):
         self.kolor = kolor
+
+    def ustaw_promien(self, promien=1.0):
+        self.promien = promien
+        self.sphere.radius = promien
 
     def ustaw_kolor(self, r=0.0, g=0.0, b=0.0):
         self.kolor.r = r
