@@ -137,9 +137,6 @@ class PunktMaterialny:
     def ustaw_predkosc(self, predkosc=Wektor()):
         self.predkosc = predkosc
 
-    def ustaw_kolor(self, kolor=Kolor()):
-        self.kolor = kolor
-
     def ustaw_promien(self, promien=1.0):
         self.promien = promien
         self.sphere.radius = promien
@@ -148,3 +145,4 @@ class PunktMaterialny:
         self.kolor.r = r
         self.kolor.g = g
         self.kolor.b = b
+        self.sphere.color=[self.kolor.r, self.kolor.g, self.kolor.b]
