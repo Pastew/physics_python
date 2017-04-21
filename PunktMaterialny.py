@@ -81,11 +81,19 @@ class ZbiorPunktowMaterialnych(object):
         if indeks >= 0 and indeks < self.ilosc:
             self.wiezy[indeks] = ustalona_pozycja
 
+    def pobierz_polozenia_kolejnych_punktow(self):
+        polozenia = []
+        for i in range(self.ilosc):
+            punkt = self.pobierz_punkt_materialny(i)
+            polozenie = punkt.polozenie.xyz()
+            polozenia.append(polozenie)
+        return polozenia
+
 
 class PunktMaterialny:
     numer_kroku = 0
 
-    def __init__(self, polozenie=Wektor(), predkosc=Wektor(), masa=1.0, promien=1.0, kolor=Kolor()):
+    def __init__(self, polozenie=Wektor(), predkosc=Wektor(), masa=1.0, promien=0.1, kolor=Kolor()):
 
         self.polozenie = polozenie
         self.predkosc = predkosc
@@ -138,11 +146,11 @@ class PunktMaterialny:
         self.predkosc = predkosc
 
     def ustaw_promien(self, promien=1.0):
-        self.promien = promien
-        self.sphere.radius = promien
+        self.promien = float(promien)
+        self.sphere.radius = self.promien
 
     def ustaw_kolor(self, r=0.0, g=0.0, b=0.0):
-        self.kolor.r = r
-        self.kolor.g = g
-        self.kolor.b = b
+        self.kolor.r = float(r)
+        self.kolor.g = float(g)
+        self.kolor.b = float(b)
         self.sphere.color=[self.kolor.r, self.kolor.g, self.kolor.b]

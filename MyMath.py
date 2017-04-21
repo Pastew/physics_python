@@ -1,11 +1,21 @@
 from numbers import Number
+from math import sqrt
 
 
 class Wektor:
     def __init__(self, x=0.0, y=0.0, z=0.0):
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x = float(x)
+        self.y = float(y)
+        self.z = float(z)
+
+    def dlugosc(self):
+        return sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+
+    def normuj(self):
+        dlugosc = self.dlugosc()
+        self.x /= dlugosc
+        self.y /= dlugosc
+        self.z /= dlugosc
 
     def __add__(self, other):
         return Wektor(self.x + other.x,
@@ -28,7 +38,7 @@ class Wektor:
                           self.z * other)
 
         print "I don't know that type: " + str(type(other))
-        print "Class: " + str(other.__class__) # TODO: remove this
+        print "Class: " + str(other.__class__)  # TODO: remove this
         return result
 
     def __div__(self, other):
@@ -37,8 +47,13 @@ class Wektor:
                           self.y / other,
                           self.z / other)
 
+        if isinstance(other, Number):
+            return Wektor(self.x * other,
+                          self.y * other,
+                          self.z * other)
+
         print "I don't know that type: " + str(type(other))
-        print "Class: " + str(other.__class__) # TODO: remove this
+        print "Class: " + str(other.__class__)  # TODO: remove this
 
     def __str__(self):
         return "[%s, %s, %s]" % (self.x, self.y, self.z)
@@ -48,9 +63,16 @@ class Wektor:
                       self.y / some_float,
                       self.z / some_float)
 
+    def xyz(self):
+        return [self.x, self.y, self.z]
+
+
 class Kolor:
     def __init__(self, r=1.0, g=1.0, b=1.0, a=1.0):
         self.r = r
         self.g = g
         self.b = b
         self.a = a
+
+    def rgb(self):
+        return [self.r, self.g, self.b]

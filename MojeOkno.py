@@ -1,8 +1,9 @@
 from visual import *
 import threading
 
-from PunktMaterialny import Algorytm
-from UkladyPunktowMaterialnych import Oscylator
+from MyMath import Kolor
+from PunktMaterialny import Algorytm, ZbiorPunktowMaterialnych
+from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone
 
 
 class MojeOkno(object):
@@ -18,8 +19,10 @@ class MojeOkno(object):
         self.iteracje_fizyki_na_jedna_klatke = 16
         self.delta_czas = self.czas_pomiedzy_dwoma_klatkami / self.iteracje_fizyki_na_jedna_klatke
 
-        self.zpm = Oscylator(1)
+        self.zpm = OscylatorySprzezone(10, 1, 0.4)
         self.przesun_do_srodka_masy = przesun_do_srodka_masy
+
+        self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
 
     def glowna_petla(self):
 
@@ -29,23 +32,26 @@ class MojeOkno(object):
         self.rysuj_uklad_wspolrzednych()
 
         while 1:
-            # rate(self.fps)
-            sleep(self.czas_pomiedzy_dwoma_klatkami)
+            rate(self.fps)
+            # sleep(self.czas_pomiedzy_dwoma_klatkami)
 
             if biezaca_klatka - ostatni_czas > 1.0:
                 print str(1 / self.czas_pomiedzy_dwoma_klatkami) + " fps"
                 ostatni_czas = biezaca_klatka
 
-            iter = self.iteracje_fizyki_na_jedna_klatke
-            while iter != 0:
+            biezaca_klatka += self.czas_pomiedzy_dwoma_klatkami
+
+            iteracja = self.iteracje_fizyki_na_jedna_klatke
+            while iteracja != 0:
                 self.zpm.krok_naprzod(self.delta_czas, self.algorytm)
-                iter -= 1
+                iteracja -= 1
 
             self.rysuj_aktorow()
 
     def rysuj_aktorow(self):
         jednostka_dlugosci = 1.0
         self.rysuj_zpm(self.zpm, jednostka_dlugosci)
+        self.rysuj_zpm_linie(self.zpm, jednostka_dlugosci)
 
     def rysuj_uklad_wspolrzednych(self):
         sphere(pos=[0, 0, 0], color=[1, 1, 1], radius=0.05)
@@ -69,3 +75,10 @@ class MojeOkno(object):
             punkt_materialny.aktualizuj_pozycje()
 
             indeks += 1
+
+    def rysuj_zpm_linie(self, zpm=ZbiorPunktowMaterialnych(0), jednostka_dlugosci=1.0, grubosc_linii=0.01, kolor=Kolor(1,1,1)):
+        if self.przesun_do_srodka_masy:
+            srodekMasy = jednostka_dlugosci * zpm.srodek_masy()
+            # TODO przesun kamere na srodek masy
+
+        self.linie.pos = zpm.pobierz_polozenia_kolejnych_punktow()
