@@ -44,28 +44,28 @@ class OscylatorySprzezone(ZbiorPunktowMaterialnych):
         self.zeruj_predkosc_srednia()
 
     def sila(self, indeks):
-        silaZLewej = Wektor(0, 0, 0)
-        silaZPrawej = Wektor(0, 0, 0)
+        sila_z_lewej = Wektor(0, 0, 0)
+        sila_z_prawej = Wektor(0, 0, 0)
 
         if indeks > 0:
-            odLewego = self.pobierz_punkt_materialny(indeks).polozenie \
-                       - self.pobierz_punkt_materialny(indeks - 1).polozenie
+            do_lewego = self.pobierz_punkt_materialny(indeks-1).polozenie \
+                       - self.pobierz_punkt_materialny(indeks).polozenie
 
-            wychylenie = odLewego.dlugosc() - self.l
+            wychylenie = do_lewego.dlugosc() - self.l
             if not self.sprezystoscTylkoPrzyRozciaganiu or wychylenie > 0:
-                odLewego.normuj()
-                silaZLewej = odLewego * -self.k * wychylenie
+                do_lewego.normuj()
+                sila_z_lewej = do_lewego * self.k * wychylenie
 
         if indeks < self.liczba_punktow() - 1:
-            doPrawego = self.pobierz_punkt_materialny(indeks + 1).polozenie \
+            do_prawego = self.pobierz_punkt_materialny(indeks + 1).polozenie \
                         - self.pobierz_punkt_materialny(indeks).polozenie
-            wychylenie = doPrawego.dlugosc() - self.l
+            wychylenie = do_prawego.dlugosc() - self.l
 
             if not self.sprezystoscTylkoPrzyRozciaganiu or wychylenie > 0:
-                doPrawego.normuj()
-                silaZPrawej = doPrawego * self.k * wychylenie
+                do_prawego.normuj()
+                sila_z_prawej = do_prawego * self.k * wychylenie
 
-        sila = silaZLewej + silaZPrawej
+        sila = sila_z_lewej + sila_z_prawej
         if self.t != 0:
             sila -= self.pobierz_punkt_materialny(indeks).predkosc * (self.t * 2.0)
         return sila
