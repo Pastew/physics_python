@@ -16,7 +16,7 @@ class MojeOkno(object):
         self.fps = 60.0
         self.czas_pomiedzy_dwoma_klatkami = 1.0 / self.fps
         self.biezacy_czas_pomiedzy_dwoma_klatkami = self.czas_pomiedzy_dwoma_klatkami
-        self.iteracje_fizyki_na_jedna_klatke = 16
+        self.iteracje_fizyki_na_jedna_klatke = 8
         self.delta_czas = self.czas_pomiedzy_dwoma_klatkami / self.iteracje_fizyki_na_jedna_klatke
 
         self.zpm = OscylatorySprzezone(10, 1, 4, wspolczynnikTlumienia=0.1)

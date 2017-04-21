@@ -39,8 +39,8 @@ class OscylatorySprzezone(ZbiorPunktowMaterialnych):
             punkt.ustaw_predkosc(Wektor(0, 0, 0))
             punkt.ustaw_kolor(0, i / float(ilosc - 1), 1)  # TODO moze trzeba castowac na float
 
-        self.pobierz_punkt_materialny(0).ustaw_predkosc(Wektor(0.3, 0, 0.2))
-        #self.pobierz_punkt_materialny(ilosc-1).ustaw_predkosc(Wektor(-0.3, -0.1, 0))
+        self.pobierz_punkt_materialny(0).ustaw_predkosc(Wektor(0.3, 0.1, 0))
+        self.pobierz_punkt_materialny(ilosc-1).ustaw_predkosc(Wektor(-0.3, -0.1, 0))
         self.zeruj_predkosc_srednia()
 
     def sila(self, indeks):
@@ -55,6 +55,8 @@ class OscylatorySprzezone(ZbiorPunktowMaterialnych):
             if not self.sprezystoscTylkoPrzyRozciaganiu or wychylenie > 0:
                 do_lewego.normuj()
                 sila_z_lewej = do_lewego * self.k * wychylenie
+                roznica_predkosci = self.pobierz_punkt_materialny(indeks-1).predkosc - self.pobierz_punkt_materialny(indeks).predkosc
+                sila_z_lewej += do_lewego * (do_lewego * roznica_predkosci) * self.t
 
         if indeks < self.liczba_punktow() - 1:
             do_prawego = self.pobierz_punkt_materialny(indeks + 1).polozenie \
@@ -64,6 +66,8 @@ class OscylatorySprzezone(ZbiorPunktowMaterialnych):
             if not self.sprezystoscTylkoPrzyRozciaganiu or wychylenie > 0:
                 do_prawego.normuj()
                 sila_z_prawej = do_prawego * self.k * wychylenie
+                roznica_predkosci = self.pobierz_punkt_materialny(indeks + 1).predkosc - self.pobierz_punkt_materialny(indeks).predkosc
+                sila_z_prawej += do_prawego * (do_prawego * roznica_predkosci) * self.t
 
         sila = sila_z_lewej + sila_z_prawej
         if self.t != 0:
