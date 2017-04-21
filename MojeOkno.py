@@ -19,7 +19,7 @@ class MojeOkno(object):
         self.iteracje_fizyki_na_jedna_klatke = 16
         self.delta_czas = self.czas_pomiedzy_dwoma_klatkami / self.iteracje_fizyki_na_jedna_klatke
 
-        self.zpm = OscylatorySprzezone(10, 1, 0.4)
+        self.zpm = OscylatorySprzezone(10, 1, 4, wspolczynnikTlumienia=0.1)
         self.przesun_do_srodka_masy = przesun_do_srodka_masy
 
         self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
