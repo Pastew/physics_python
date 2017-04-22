@@ -229,3 +229,7 @@ class LinaZPodlozem(Lina):
             if punkt.polozenie.y <= self.poziom_podloza_y:
                 punkt.polozenie.y = self.poziom_podloza_y
                 punkt.predkosc.y = 0
+
+    def przesun_wszystkie_punkty(self, wektor):
+        for p in self.punkty:
+            p.polozenie += wektor
