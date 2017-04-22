@@ -3,7 +3,7 @@ import threading
 
 from MyMath import Kolor
 from PunktMaterialny import Algorytm, ZbiorPunktowMaterialnych
-from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone
+from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, UsztywnioneOscylatorySprzezone
 
 
 class MojeOkno(object):
@@ -12,6 +12,7 @@ class MojeOkno(object):
         self.poprzedni_czas = 0.0
         self.pauza = False
         self.typ_rzutowania = False
+        self.przesun_do_srodka_masy = przesun_do_srodka_masy
 
         self.fps = 60.0
         self.czas_pomiedzy_dwoma_klatkami = 1.0 / self.fps
@@ -19,8 +20,13 @@ class MojeOkno(object):
         self.iteracje_fizyki_na_jedna_klatke = 8
         self.delta_czas = self.czas_pomiedzy_dwoma_klatkami / self.iteracje_fizyki_na_jedna_klatke
 
-        self.zpm = OscylatorySprzezone(10, 1, 4, wspolczynnikTlumienia=0.1)
-        self.przesun_do_srodka_masy = przesun_do_srodka_masy
+        ilosc = 10
+        wspolczynnik_sprezystosci = 1
+        wspolczynnik_tlumienia = 0.1
+        wspolczynnik_sztywnosci = 0.1
+        dlugosc = 4
+        self.zpm = UsztywnioneOscylatorySprzezone(ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+                                                  wspolczynnik_sztywnosci, dlugosc)
 
         self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
 
@@ -76,7 +82,8 @@ class MojeOkno(object):
 
             indeks += 1
 
-    def rysuj_zpm_linie(self, zpm=ZbiorPunktowMaterialnych(0), jednostka_dlugosci=1.0, grubosc_linii=0.01, kolor=Kolor(1,1,1)):
+    def rysuj_zpm_linie(self, zpm=ZbiorPunktowMaterialnych(0), jednostka_dlugosci=1.0, grubosc_linii=0.01,
+                        kolor=Kolor(1, 1, 1)):
         if self.przesun_do_srodka_masy:
             srodekMasy = jednostka_dlugosci * zpm.srodek_masy()
             # TODO przesun kamere na srodek masy
