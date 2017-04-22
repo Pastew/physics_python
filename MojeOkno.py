@@ -3,7 +3,7 @@ import threading
 
 from MyMath import Kolor
 from PunktMaterialny import Algorytm, ZbiorPunktowMaterialnych
-from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, UsztywnioneOscylatorySprzezone
+from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, UsztywnioneOscylatorySprzezone, Lina
 
 
 class MojeOkno(object):
@@ -14,19 +14,19 @@ class MojeOkno(object):
         self.typ_rzutowania = False
         self.przesun_do_srodka_masy = przesun_do_srodka_masy
 
-        self.fps = 60.0
+        self.fps = 30.0
         self.czas_pomiedzy_dwoma_klatkami = 1.0 / self.fps
         self.biezacy_czas_pomiedzy_dwoma_klatkami = self.czas_pomiedzy_dwoma_klatkami
         self.iteracje_fizyki_na_jedna_klatke = 8
         self.delta_czas = self.czas_pomiedzy_dwoma_klatkami / self.iteracje_fizyki_na_jedna_klatke
 
         ilosc = 10
-        wspolczynnik_sprezystosci = 1
-        wspolczynnik_tlumienia = 0.1
-        wspolczynnik_tlumienia_oscylacji = 0.1
-        wspolczynnik_sztywnosci = 0.1
-        dlugosc = 4
-        self.zpm = UsztywnioneOscylatorySprzezone(ilosc, wspolczynnik_sprezystosci,
+        wspolczynnik_sprezystosci = 100
+        wspolczynnik_tlumienia = 0.02
+        wspolczynnik_tlumienia_oscylacji = 1
+        wspolczynnik_sztywnosci = 1
+        dlugosc = 2
+        self.zpm = Lina(ilosc, wspolczynnik_sprezystosci,
                                                   wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji,
                                                   wspolczynnik_sztywnosci, dlugosc)
         self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
