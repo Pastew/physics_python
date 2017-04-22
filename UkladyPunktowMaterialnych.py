@@ -41,9 +41,9 @@ class OscylatorySprzezone(ZbiorPunktowMaterialnych):
             punkt.ustaw_predkosc(Wektor(0, 0, 0))
             punkt.ustaw_kolor(0, i / float(ilosc - 1), 1)  # TODO moze trzeba castowac na float
 
-        #self.pobierz_punkt_materialny(0).ustaw_predkosc(Wektor(0.3, 0.1, 0))
-        #self.pobierz_punkt_materialny(ilosc - 1).ustaw_predkosc(Wektor(-0.3, -0.1, 0))
-        #self.zeruj_predkosc_srednia()
+            # self.pobierz_punkt_materialny(0).ustaw_predkosc(Wektor(0.3, 0.1, 0))
+            # self.pobierz_punkt_materialny(ilosc - 1).ustaw_predkosc(Wektor(-0.3, -0.1, 0))
+            # self.zeruj_predkosc_srednia()
 
     def sila(self, indeks):
         sila_z_lewej = Wektor(0, 0, 0)
@@ -90,10 +90,10 @@ class UsztywnioneOscylatorySprzezone(OscylatorySprzezone):
         for i in range(0, ilosc):
             self.sily_sztywnosci.append(Wektor())
 
-        #self.pobierz_punkt_materialny(0).ustaw_predkosc(Wektor(0, 0.1, 0))
-        #self.pobierz_punkt_materialny((ilosc - 1) / 2).ustaw_predkosc(Wektor(0, -0.1, 0))
-        #self.pobierz_punkt_materialny((ilosc - 1) / 2 + 1).ustaw_predkosc(Wektor(0, -0.1, 0))
-        #self.pobierz_punkt_materialny(ilosc - 1).ustaw_predkosc(Wektor(0, 0.1, 0))
+            # self.pobierz_punkt_materialny(0).ustaw_predkosc(Wektor(0, 0.1, 0))
+            # self.pobierz_punkt_materialny((ilosc - 1) / 2).ustaw_predkosc(Wektor(0, -0.1, 0))
+            # self.pobierz_punkt_materialny((ilosc - 1) / 2 + 1).ustaw_predkosc(Wektor(0, -0.1, 0))
+            # self.pobierz_punkt_materialny(ilosc - 1).ustaw_predkosc(Wektor(0, 0.1, 0))
 
     def przed_krokiem_naprzod(self, krok_czasowy):
         super(UsztywnioneOscylatorySprzezone, self).przed_krokiem_naprzod(krok_czasowy)
@@ -136,3 +136,42 @@ class Lina(UsztywnioneOscylatorySprzezone):
 
     def sila(self, indeks):
         return super(Lina, self).sila(indeks) + self.g * self.pobierz_punkt_materialny(indeks).masa
+
+
+class LinaOddzialywaniaZDalszymiSasiadami(Lina):
+    def __init__(self, ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+                 wpolczynnik_tlumienia_oscylacji, wspolczynnik_sztywnosci, dlugosc, ile_dodatkowych_oddzialywan=3):
+        super(LinaOddzialywaniaZDalszymiSasiadami, self).__init__(ilosc, wspolczynnik_sprezystosci,
+                                                                  wspolczynnik_tlumienia,
+                                                                  wpolczynnik_tlumienia_oscylacji,
+                                                                  wspolczynnik_sztywnosci, dlugosc)
+
+        self.ile_dodatkowych_oddzialywan = ile_dodatkowych_oddzialywan
+
+    def sila(self, indeks):
+        sila = super(LinaOddzialywaniaZDalszymiSasiadami, self).sila(indeks)
+
+        for n in range(2, self.ile_dodatkowych_oddzialywan + 2):
+            sila_z_lewej = Wektor(0, 0, 0)
+            sila_z_prawej = Wektor(0, 0, 0)
+
+            if indeks >= n:
+                od_lewego = self.pobierz_punkt_materialny(indeks).polozenie \
+                            - self.pobierz_punkt_materialny(indeks - n).polozenie
+                wychylenie = od_lewego.dlugosc() - n * self.l
+                if not self.sprezystoscTylkoPrzyRozciaganiu or wychylenie > 0:
+                    od_lewego.normuj()
+                    sila_z_lewej = od_lewego * wychylenie * -self.k
+
+            if indeks < self.liczba_punktow() - n:
+                do_prawego = self.pobierz_punkt_materialny(indeks + n).polozenie \
+                             - self.pobierz_punkt_materialny(indeks).polozenie
+                wychylenie = do_prawego.dlugosc() - n * self.l
+                if not self.sprezystoscTylkoPrzyRozciaganiu or wychylenie > 0:
+                    do_prawego.normuj()
+                    sila_z_prawej = do_prawego * wychylenie * self.k
+
+        sila += sila_z_prawej
+        sila += sila_z_lewej
+
+        return sila

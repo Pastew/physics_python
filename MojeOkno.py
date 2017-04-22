@@ -3,7 +3,8 @@ import threading
 
 from MyMath import Kolor
 from PunktMaterialny import Algorytm, ZbiorPunktowMaterialnych
-from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, UsztywnioneOscylatorySprzezone, Lina
+from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, UsztywnioneOscylatorySprzezone, Lina, \
+    LinaOddzialywaniaZDalszymiSasiadami
 
 
 class MojeOkno(object):
@@ -26,9 +27,9 @@ class MojeOkno(object):
         wspolczynnik_tlumienia_oscylacji = 1
         wspolczynnik_sztywnosci = 1
         dlugosc = 2
-        self.zpm = Lina(ilosc, wspolczynnik_sprezystosci,
+        self.zpm = LinaOddzialywaniaZDalszymiSasiadami(ilosc, wspolczynnik_sprezystosci,
                                                   wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji,
-                                                  wspolczynnik_sztywnosci, dlugosc)
+                                                  wspolczynnik_sztywnosci, dlugosc,3)
         self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
 
     def glowna_petla(self):
@@ -80,6 +81,7 @@ class MojeOkno(object):
             # Tu jest miejsce na filtrowanie rysowanych punktow
 
             punkt_materialny.aktualizuj_pozycje()
+            #punkt_materialny.sphere.opacity = 0
 
             indeks += 1
 
