@@ -9,13 +9,16 @@ class Wektor:
         self.z = float(z)
 
     def dlugosc(self):
-        return sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+        return sqrt(self.x * self.x +
+                    self.y * self.y +
+                    self.z * self.z)
 
     def normuj(self):
         dlugosc = self.dlugosc()
         self.x /= dlugosc
         self.y /= dlugosc
         self.z /= dlugosc
+        return self
 
     def __add__(self, other):
         return Wektor(self.x + other.x,

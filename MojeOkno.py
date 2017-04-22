@@ -4,11 +4,11 @@ import threading
 from MyMath import Kolor
 from PunktMaterialny import Algorytm, ZbiorPunktowMaterialnych
 from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, UsztywnioneOscylatorySprzezone, Lina, \
-    LinaOddzialywaniaZDalszymiSasiadami, Wlos
+    LinaOddzialywaniaZDalszymiSasiadami, Wlos, LinaZPodlozem
 
 
 class MojeOkno(object):
-    def __init__(self, zpm=None, przesun_do_srodka_masy=False):
+    def __init__(self, zpm=None, rysuj_linie=True, przesun_do_srodka_masy=False):
         self.algorytm = Algorytm.VERLET
         self.poprzedni_czas = 0.0
         self.pauza = False
@@ -18,7 +18,7 @@ class MojeOkno(object):
         self.fps = 30.0
         self.czas_pomiedzy_dwoma_klatkami = 1.0 / self.fps
         self.biezacy_czas_pomiedzy_dwoma_klatkami = self.czas_pomiedzy_dwoma_klatkami
-        self.iteracje_fizyki_na_jedna_klatke = 8
+        self.iteracje_fizyki_na_jedna_klatke = 4
         self.delta_czas = self.czas_pomiedzy_dwoma_klatkami / self.iteracje_fizyki_na_jedna_klatke
 
         ilosc = 10
@@ -27,10 +27,16 @@ class MojeOkno(object):
         wspolczynnik_tlumienia_oscylacji = 1
         wspolczynnik_sztywnosci = 1
         dlugosc = 2
-        self.zpm = Wlos(ilosc, wspolczynnik_sprezystosci,
-                                                  wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji,
-                                                  wspolczynnik_sztywnosci, dlugosc)
-        self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
+
+        self.zpm = zpm
+        if zpm is None:
+            self.zpm = LinaZPodlozem(ilosc, wspolczynnik_sprezystosci,
+                                     wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji,
+                                     wspolczynnik_sztywnosci, dlugosc)
+
+        self.rysuj_linie = rysuj_linie
+        if self.rysuj_linie:
+            self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
 
     def glowna_petla(self):
 
@@ -41,7 +47,7 @@ class MojeOkno(object):
 
         while 1:
             rate(self.fps)
-            # sleep(self.czas_pomiedzy_dwoma_klatkami)
+            #sleep(self.czas_pomiedzy_dwoma_klatkami)
 
             if biezaca_klatka - ostatni_czas > 1.0:
                 print str(1 / self.czas_pomiedzy_dwoma_klatkami) + " fps"
@@ -56,10 +62,19 @@ class MojeOkno(object):
 
             self.rysuj_aktorow()
 
+    def schowaj_punkty(self):
+        for punkt in self.zpm.punkty:
+            punkt.sphere.opacity = 0
+
+    def pokaz_punkty(self):
+        for punkt in self.zpm.punkty:
+            punkt.sphere.opacity = 1
+
     def rysuj_aktorow(self):
         jednostka_dlugosci = 1.0
         self.rysuj_zpm(self.zpm, jednostka_dlugosci)
-        self.rysuj_zpm_linie(self.zpm, jednostka_dlugosci)
+        if self.rysuj_linie:
+            self.rysuj_zpm_linie(self.zpm, jednostka_dlugosci)
 
     def rysuj_uklad_wspolrzednych(self):
         sphere(pos=[0, 0, 0], color=[1, 1, 1], radius=0.05)
@@ -81,7 +96,7 @@ class MojeOkno(object):
             # Tu jest miejsce na filtrowanie rysowanych punktow
 
             punkt_materialny.aktualizuj_pozycje()
-            #punkt_materialny.sphere.opacity = 0
+            # punkt_materialny.sphere.opacity = 0
 
             indeks += 1
 
