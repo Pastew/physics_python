@@ -23,7 +23,8 @@ class Oscylator(ZbiorPunktowMaterialnych):
 
 
 class OscylatorySprzezone(ZbiorPunktowMaterialnych):
-    def __init__(self, ilosc, wspolczynnikSprezystosci, dlugosc, wspolczynnikTlumienia=0.0):
+    def __init__(self, ilosc, wspolczynnikSprezystosci, dlugosc,
+                 wspolczynnikTlumienia=0.0, wspolczynnik_tlumienia_oscylacji=0.0):
         super(OscylatorySprzezone, self).__init__(ilosc)
         self.k = float(wspolczynnikSprezystosci)
         self.l = float(dlugosc / float(ilosc - 1))
@@ -31,6 +32,7 @@ class OscylatorySprzezone(ZbiorPunktowMaterialnych):
         # Jesli True - gumka, dziala tylko przyciaganie gdy odleglosc > 1
         self.sprezystoscTylkoPrzyRozciaganiu = False
         self.t = float(wspolczynnikTlumienia)
+        self.tt = float(wspolczynnik_tlumienia_oscylacji)
 
         for i in range(0, ilosc):
             punkt = self.pobierz_punkt_materialny(i)
@@ -69,19 +71,19 @@ class OscylatorySprzezone(ZbiorPunktowMaterialnych):
                 sila_z_prawej = do_prawego * self.k * wychylenie
                 roznica_predkosci = self.pobierz_punkt_materialny(indeks + 1).predkosc - self.pobierz_punkt_materialny(
                     indeks).predkosc
-                sila_z_prawej += do_prawego * (do_prawego * roznica_predkosci) * self.t
+                sila_z_prawej += do_prawego * (do_prawego * roznica_predkosci) * self.tt
 
         sila = sila_z_lewej + sila_z_prawej
         if self.t != 0:
-            sila -= self.pobierz_punkt_materialny(indeks).predkosc * (self.t * 2.0)
+            sila -= self.pobierz_punkt_materialny(indeks).predkosc * (self.tt * 2.0)
         return sila
 
 
 class UsztywnioneOscylatorySprzezone(OscylatorySprzezone):
-    def __init__(self, ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+    def __init__(self, ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji,
                  wspolczynnik_sztywnosci, dlugosc):
         super(UsztywnioneOscylatorySprzezone, self).__init__(ilosc, wspolczynnik_sprezystosci, dlugosc,
-                                                             wspolczynnik_tlumienia)
+                                                             wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji)
         self.s = wspolczynnik_sztywnosci
         self.sily_sztywnosci = []
         for i in range(0, ilosc):
@@ -113,3 +115,10 @@ class UsztywnioneOscylatorySprzezone(OscylatorySprzezone):
             sila += self.sily_sztywnosci[indeks]
 
         return sila
+
+
+class Lina(UsztywnioneOscylatorySprzezone):
+    def __init__(self, ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+                 wpolczynnik_tlumienia_oscylacji, wspolczynnik_sztywnosci, dlugosc):
+        super(Lina, self).__init__(ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+                                   wspolczynnik_sztywnosci, dlugosc)

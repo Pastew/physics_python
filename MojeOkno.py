@@ -23,11 +23,12 @@ class MojeOkno(object):
         ilosc = 10
         wspolczynnik_sprezystosci = 1
         wspolczynnik_tlumienia = 0.1
+        wspolczynnik_tlumienia_oscylacji = 0.1
         wspolczynnik_sztywnosci = 0.1
         dlugosc = 4
-        self.zpm = UsztywnioneOscylatorySprzezone(ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+        self.zpm = UsztywnioneOscylatorySprzezone(ilosc, wspolczynnik_sprezystosci,
+                                                  wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji,
                                                   wspolczynnik_sztywnosci, dlugosc)
-
         self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
 
     def glowna_petla(self):
