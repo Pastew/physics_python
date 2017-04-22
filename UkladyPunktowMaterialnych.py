@@ -175,3 +175,12 @@ class LinaOddzialywaniaZDalszymiSasiadami(Lina):
         sila += sila_z_lewej
 
         return sila
+
+class Wlos(Lina):
+    def __init__(self, ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+                 wpolczynnik_tlumienia_oscylacji, wspolczynnik_sztywnosci, dlugosc):
+        super(Wlos, self).__init__(ilosc, wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+                                   wpolczynnik_tlumienia_oscylacji, wspolczynnik_sztywnosci, dlugosc)
+
+        self.ustaw_wiezy(0, True)
+        self.ustaw_wiezy(1, True)

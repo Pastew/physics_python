@@ -4,7 +4,7 @@ import threading
 from MyMath import Kolor
 from PunktMaterialny import Algorytm, ZbiorPunktowMaterialnych
 from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, UsztywnioneOscylatorySprzezone, Lina, \
-    LinaOddzialywaniaZDalszymiSasiadami
+    LinaOddzialywaniaZDalszymiSasiadami, Wlos
 
 
 class MojeOkno(object):
@@ -27,9 +27,9 @@ class MojeOkno(object):
         wspolczynnik_tlumienia_oscylacji = 1
         wspolczynnik_sztywnosci = 1
         dlugosc = 2
-        self.zpm = LinaOddzialywaniaZDalszymiSasiadami(ilosc, wspolczynnik_sprezystosci,
+        self.zpm = Wlos(ilosc, wspolczynnik_sprezystosci,
                                                   wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji,
-                                                  wspolczynnik_sztywnosci, dlugosc,3)
+                                                  wspolczynnik_sztywnosci, dlugosc)
         self.linie = curve(pos=self.zpm.pobierz_polozenia_kolejnych_punktow(), radius=0.01, color=Kolor(1, 1, 1).rgb())
 
     def glowna_petla(self):

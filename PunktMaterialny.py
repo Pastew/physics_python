@@ -25,14 +25,15 @@ class ZbiorPunktowMaterialnych(object):
     def sila(self, i):
         return Wektor()
 
-    def przygotuj_ruch(self, krok_czasowy, algorytm=Algorytm.EULER):
+    def przygotuj_ruch(self, krok_czasowy, algorytm=Algorytm.VERLET):
         for i in range(self.ilosc):
             if self.wiezy[i] is False:
                 self.punkty[i].przygotuj_ruch(self.sila(i), krok_czasowy, algorytm)
 
     def wykonaj_ruch(self):
         for i in range(self.ilosc):
-            self.punkty[i].wykonaj_ruch()
+            if self.wiezy[i] is False:
+                self.punkty[i].wykonaj_ruch()
 
     def krok_naprzod(self, krok_czasowy, algorytm):
         self.przed_krokiem_naprzod(krok_czasowy)
