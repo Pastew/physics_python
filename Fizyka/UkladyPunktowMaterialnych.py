@@ -234,7 +234,7 @@ class LinaZPodlozem(Lina):
 
     def sila(self, indeks):
         sila = super(LinaZPodlozem, self).sila(indeks)
-        sp = 0.1 # wspolczynnik tarcia podloza
+        sp = 1.1 # wspolczynnik tarcia podloza
         punkt = self.pobierz_punkt_materialny(indeks)
         if punkt.polozenie.y <= self.poziom_podloza_y:
             sila += punkt.predkosc * (-2 * sp)

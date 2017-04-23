@@ -44,6 +44,35 @@ class Symulacja(object):
                 self.cienie.append(curve(radius=0.02,
                                          color=[0.2, 0.2, 0.2]))
 
+        self.trzymany_punkt = self.zpms[0].pobierz_punkt_materialny(0)
+
+    def obsluz_klawiature(self):
+        if scene.kb.keys:
+            s = scene.kb.getkey()  # get keyboard info
+            zpm = self.zpms[0]
+            zmiana_polozenia = 0.1
+            if s == 'o':
+                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, zmiana_polozenia, 0))
+            if s == 'u':
+                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, -zmiana_polozenia, 0))
+            if s == 'j':
+                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(-zmiana_polozenia, 0, 0))
+            if s == 'l':
+                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(zmiana_polozenia, 0, 0))
+            if s == 'i':
+                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, 0, -zmiana_polozenia))
+            if s == 'k':
+                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, 0, zmiana_polozenia))
+            if s == 'm':
+                zpm.ustaw_wiezy(0, not zpm.wiezy[0])
+
+            nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+            if s in nums:
+                print(s)
+                zpm.ustaw_wiezy(int(s), not zpm.wiezy[int(s)])
+                self.trzymany_punkt = zpm.pobierz_punkt_materialny(int(s))
+        pass
+
     def glowna_petla(self):
 
         biezaca_klatka = 0.0  # Time of the current frame
@@ -54,6 +83,7 @@ class Symulacja(object):
         while 1:
             rate(self.fps)
             # sleep(self.czas_pomiedzy_dwoma_klatkami)
+            self.obsluz_klawiature()
 
             if biezaca_klatka - ostatni_czas > 1.0:
                 print str(1 / self.czas_pomiedzy_dwoma_klatkami) + " fps"

@@ -81,6 +81,7 @@ class ZbiorPunktowMaterialnych(object):
     def ustaw_wiezy(self, indeks, ustalona_pozycja):
         if indeks >= 0 and indeks < self.ilosc:
             self.wiezy[indeks] = ustalona_pozycja
+            self.punkty[indeks].ustaw_predkosc(Wektor(0, 0, 0))
 
     # Zwraca polozenia kolejnych punktow, na przyklad dla 4 elementowego zpm:
     # [[x1,y1,z1],
@@ -163,4 +164,4 @@ class PunktMaterialny:
         self.kolor.r = float(r)
         self.kolor.g = float(g)
         self.kolor.b = float(b)
-        self.sphere.color=[self.kolor.r, self.kolor.g, self.kolor.b]
+        self.sphere.color = [self.kolor.r, self.kolor.g, self.kolor.b]
