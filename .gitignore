@@ -5,7 +5,6 @@ dist
 ###################
 *.com
 *.class
-*.dll
 *.exe
 *.o
 *.so
