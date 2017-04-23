@@ -51,17 +51,17 @@ class Symulacja(object):
             s = scene.kb.getkey()  # get keyboard info
             zpm = self.zpms[0]
             zmiana_polozenia = 0.1
-            if s == 'o':
+            if s == 'e':
                 self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, zmiana_polozenia, 0))
-            if s == 'u':
+            if s == 'q':
                 self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, -zmiana_polozenia, 0))
-            if s == 'j':
+            if s == 'a':
                 self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(-zmiana_polozenia, 0, 0))
-            if s == 'l':
+            if s == 'd':
                 self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(zmiana_polozenia, 0, 0))
-            if s == 'i':
+            if s == 'w':
                 self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, 0, -zmiana_polozenia))
-            if s == 'k':
+            if s == 's':
                 self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, 0, zmiana_polozenia))
             if s == 'm':
                 zpm.ustaw_wiezy(0, not zpm.wiezy[0])
