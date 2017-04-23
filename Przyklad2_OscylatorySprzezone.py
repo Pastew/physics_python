@@ -1,7 +1,7 @@
 from Fizyka.Symulacja import Symulacja
 from Fizyka.UkladyPunktowMaterialnych import OscylatorySprzezone
 
-ilosc = 10
+ilosc = 11
 wspolczynnik_sprezystosci = 1
 wspolczynnik_tlumienia = 0.0
 wspolczynnik_tlumienia_oscylacji = 1

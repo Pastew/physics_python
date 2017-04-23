@@ -7,8 +7,8 @@ from Fizyka.MyMath import Wektor
 
 
 class Oscylator(ZbiorPunktowMaterialnych):
-    def __init__(self, wspolczynnik_sprezystosci=1.0):
-        self.k = wspolczynnik_sprezystosci
+    def __init__(self, k=1.0):
+        self.k = k
 
         super(Oscylator, self).__init__(1)
 
@@ -17,6 +17,27 @@ class Oscylator(ZbiorPunktowMaterialnych):
         punkt.ustaw_predkosc(Wektor(1, 1, 0))
         punkt.ustaw_kolor(0, 0.5, 1)
         punkt.ustaw_promien(random.random() * 0.3)
+
+    def sila(self, i):
+        return self.pobierz_punkt_materialny(0).polozenie * (-self.k)
+
+
+class Oscylatory(ZbiorPunktowMaterialnych):
+    def __init__(self, k=1.0, ilosc_punktow=10):
+        self.k = k
+
+        super(Oscylatory, self).__init__(ilosc_punktow)
+
+        for i in range(0, ilosc_punktow):
+            punkt = self.pobierz_punkt_materialny(i)
+            polozenie = Wektor(random.random() * 2.0 - 1, random.random() * 2.0 - 1, random.random() * 2.0 - 1)
+            punkt.ustaw_polozenie(polozenie)
+
+            predkosc = Wektor(random.random(), random.random(), random.random())
+            punkt.ustaw_predkosc(predkosc)
+
+            punkt.ustaw_kolor(random.random(), random.random(), random.random())
+            punkt.ustaw_promien(random.random() * 0.3)
 
     def sila(self, i):
         return self.pobierz_punkt_materialny(0).polozenie * (-self.k)
@@ -43,8 +64,8 @@ class OscylatorySprzezone(ZbiorPunktowMaterialnych):
             punkt.ustaw_predkosc(Wektor(0, 0, 0))
             punkt.ustaw_kolor(0, i / float(ilosc - 1), 1)
 
-            self.pobierz_punkt_materialny(ilosc / 2 - 1).ustaw_predkosc(Wektor(0, 2.1, 0))
-            # self.zeruj_predkosc_srednia()
+        self.pobierz_punkt_materialny(ilosc / 2).ustaw_predkosc(Wektor(0, 2.1, 0))
+        self.zeruj_predkosc_srednia()
 
     def sila(self, indeks):
         sila_z_lewej = Wektor(0, 0, 0)
@@ -95,10 +116,11 @@ class UsztywnioneOscylatorySprzezone(OscylatorySprzezone):
         for i in range(0, ilosc):
             self.sily_sztywnosci.append(Wektor(0, 0, 0))
 
-        self.pobierz_punkt_materialny(0).ustaw_predkosc(Wektor(0, 0.1, 0))
-        self.pobierz_punkt_materialny((ilosc - 1) / 2).ustaw_predkosc(Wektor(0, -0.1, 0))
-        self.pobierz_punkt_materialny((ilosc - 1) / 2 + 1).ustaw_predkosc(Wektor(0, -0.1, 0))
-        self.pobierz_punkt_materialny(ilosc - 1).ustaw_predkosc(Wektor(0, 0.1, 0))
+        wielkosc_sily = 0.3
+        self.pobierz_punkt_materialny(0).ustaw_predkosc(Wektor(0, wielkosc_sily, 0))
+        self.pobierz_punkt_materialny((ilosc - 1) / 2).ustaw_predkosc(Wektor(0, -wielkosc_sily, 0))
+        self.pobierz_punkt_materialny((ilosc - 1) / 2 + 1).ustaw_predkosc(Wektor(0, -wielkosc_sily, 0))
+        self.pobierz_punkt_materialny(ilosc - 1).ustaw_predkosc(Wektor(0, wielkosc_sily, 0))
 
     def przed_krokiem_naprzod(self, krok_czasowy):
         super(UsztywnioneOscylatorySprzezone, self).przed_krokiem_naprzod(krok_czasowy)
@@ -234,10 +256,9 @@ class LinaZPodlozem(Lina):
 
     def sila(self, indeks):
         sila = super(LinaZPodlozem, self).sila(indeks)
-        sp = 1.1 # wspolczynnik tarcia podloza
+        sp = 1.1  # wspolczynnik tarcia podloza
         punkt = self.pobierz_punkt_materialny(indeks)
         if punkt.polozenie.y <= self.poziom_podloza_y:
             sila += punkt.predkosc * (-2 * sp)
 
         return sila
-
