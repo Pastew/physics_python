@@ -22,5 +22,8 @@ Copy all tga files from tgas dir of this repo to dist directory (where .exe file
 
 ## Przyklad7
 ![Przyklad7](/screenshots/przyklad7.PNG)
+
+Tutaj widac ze jest w sumie 20 punktow i dwa sa zablokowane w powietrzu.
+![Przyklad7_2](/screenshots/przyklad7_2.PNG)
 ## Przyklad8
 ![Przyklad8](/screenshots/przyklad8.PNG)
