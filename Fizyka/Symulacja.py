@@ -7,7 +7,7 @@ from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, Usztywnion
     LinaOddzialywaniaZDalszymiSasiadami, Wlos, LinaZPodlozem
 
 
-class MojeOkno(object):
+class Symulacja(object):
     def __init__(self, zpms=None, rysuj_linie=True, przesun_do_srodka_masy=False):
         self.algorytm = Algorytm.VERLET
         self.poprzedni_czas = 0.0

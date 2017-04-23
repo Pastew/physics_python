@@ -1,4 +1,4 @@
-from Fizyka.MojeOkno import MojeOkno
+from Fizyka.Symulacja import Symulacja
 from Fizyka.UkladyPunktowMaterialnych import OscylatorySprzezone
 
 ilosc = 10
@@ -12,5 +12,5 @@ zpm = OscylatorySprzezone(ilosc, wspolczynnik_sprezystosci,
                           wspolczynnik_tlumienia_oscylacji,
                           dlugosc)
 
-moje_okno = MojeOkno(zpm)
+moje_okno = Symulacja(zpm)
 moje_okno.glowna_petla()

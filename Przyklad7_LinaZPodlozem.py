@@ -1,6 +1,6 @@
 from visual import *
 
-from Fizyka.MojeOkno import MojeOkno
+from Fizyka.Symulacja import Symulacja
 from Fizyka.MyMath import Wektor
 from Fizyka.UkladyPunktowMaterialnych import LinaZPodlozem
 
@@ -23,7 +23,7 @@ zpm.pobierz_punkt_materialny(zpm.ilosc - 1).ustaw_polozenie(Wektor(1.2, 0.3, -0.
 box_height = 0.5
 box(pos=[0, poziom_podloza_y - 0.5 * box_height, 0], height=box_height, width=5, length=10)
 
-moje_okno = MojeOkno([zpm])
+moje_okno = Symulacja([zpm])
 #moje_okno.schowaj_punkty()
 moje_okno.kolor_linii([0.6, 0.1, 0.2])
 moje_okno.grubosc_linii(0.05)

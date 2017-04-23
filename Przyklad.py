@@ -1,4 +1,4 @@
-from Fizyka.MojeOkno import MojeOkno
+from Fizyka.Symulacja import Symulacja
 
-moje_okno = MojeOkno()
+moje_okno = Symulacja()
 moje_okno.glowna_petla()

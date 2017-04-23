@@ -1,5 +1,5 @@
 # Ten przykald dziwnie dziala
-from Fizyka.MojeOkno import MojeOkno
+from Fizyka.Symulacja import Symulacja
 from Fizyka.UkladyPunktowMaterialnych import LinaOddzialywaniaZDalszymiSasiadami
 
 ilosc = 10
@@ -16,5 +16,5 @@ zpm = LinaOddzialywaniaZDalszymiSasiadami(ilosc, wspolczynnik_sprezystosci,
                                           wspolczynnik_sztywnosci, dlugosc,
                                           ile_dodatkowych_oddzialywan)
 
-moje_okno = MojeOkno(zpm)
+moje_okno = Symulacja(zpm)
 moje_okno.glowna_petla()
