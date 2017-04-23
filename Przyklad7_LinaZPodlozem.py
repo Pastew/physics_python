@@ -5,12 +5,12 @@ from Fizyka.MyMath import Wektor
 from Fizyka.UkladyPunktowMaterialnych import LinaZPodlozem
 
 ilosc = 20
-wspolczynnik_sprezystosci = 10
+wspolczynnik_sprezystosci = 50
 wspolczynnik_tlumienia = 0.02
 wspolczynnik_tlumienia_oscylacji = 1
 wspolczynnik_sztywnosci = 10
 dlugosc = 5
-poziom_podloza_y = -2
+poziom_podloza_y = -3
 
 zpm = LinaZPodlozem(ilosc, wspolczynnik_sprezystosci,
                     wspolczynnik_tlumienia, wspolczynnik_tlumienia_oscylacji,

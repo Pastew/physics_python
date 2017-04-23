@@ -232,6 +232,12 @@ class LinaZPodlozem(Lina):
                 punkt.polozenie.y = self.poziom_podloza_y
                 punkt.predkosc.y = 0
 
-    def przesun_wszystkie_punkty(self, wektor):
-        for p in self.punkty:
-            p.polozenie += wektor
+    def sila(self, indeks):
+        sila = super(LinaZPodlozem, self).sila(indeks)
+        sp = 0.1 # wspolczynnik tarcia podloza
+        punkt = self.pobierz_punkt_materialny(indeks)
+        if punkt.polozenie.y <= self.poziom_podloza_y:
+            sila += punkt.predkosc * (-2 * sp)
+
+        return sila
+

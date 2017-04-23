@@ -90,6 +90,10 @@ class ZbiorPunktowMaterialnych(object):
             polozenia.append(polozenie)
         return polozenia
 
+    def przesun_wszystkie_punkty(self, wektor):
+        for p in self.punkty:
+            p.polozenie += wektor
+
 
 class PunktMaterialny:
     numer_kroku = 0
