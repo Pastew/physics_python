@@ -1,5 +1,5 @@
-from MojeOkno import MojeOkno
-from UkladyPunktowMaterialnych import Lina
+from Fizyka.MojeOkno import MojeOkno
+from Fizyka.UkladyPunktowMaterialnych import Lina
 
 ilosc = 10
 wspolczynnik_sprezystosci = 1000

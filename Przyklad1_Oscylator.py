@@ -1,7 +1,7 @@
 # Ten przyklad nie dziala. Chyba sily sztywnosci sa zle zaimplementowane
 
-from MojeOkno import MojeOkno
-from UkladyPunktowMaterialnych import Oscylator
+from Fizyka.MojeOkno import MojeOkno
+from Fizyka.UkladyPunktowMaterialnych import Oscylator
 
 zpm = Oscylator(1)
 

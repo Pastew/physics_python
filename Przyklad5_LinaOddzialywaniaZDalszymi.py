@@ -1,6 +1,6 @@
 # Ten przykald dziwnie dziala
-from MojeOkno import MojeOkno
-from UkladyPunktowMaterialnych import LinaOddzialywaniaZDalszymiSasiadami
+from Fizyka.MojeOkno import MojeOkno
+from Fizyka.UkladyPunktowMaterialnych import LinaOddzialywaniaZDalszymiSasiadami
 
 ilosc = 10
 wspolczynnik_sprezystosci = 1000

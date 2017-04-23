@@ -1,9 +1,10 @@
 # Ten przyklad nie dziala. Chyba sily sztywnosci sa zle zaimplementowane
 
-from MojeOkno import MojeOkno
-from MyMath import Wektor
-from UkladyPunktowMaterialnych import Wlos
 from visual import *
+
+from Fizyka.MojeOkno import MojeOkno
+from Fizyka.MyMath import Wektor
+from Fizyka.UkladyPunktowMaterialnych import Wlos
 
 ilosc = 5
 wspolczynnik_sprezystosci = 10

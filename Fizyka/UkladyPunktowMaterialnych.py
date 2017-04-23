@@ -1,7 +1,9 @@
 from random import random
-from visual import *
-from MyMath import Wektor
+
 from PunktMaterialny import ZbiorPunktowMaterialnych
+from visual import *
+
+from Fizyka.MyMath import Wektor
 
 
 class Oscylator(ZbiorPunktowMaterialnych):

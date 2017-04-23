@@ -1,6 +1,6 @@
 import unittest
 
-from MyMath import Wektor
+from Fizyka.MyMath import Wektor
 
 
 class TestMyMath(unittest.TestCase):

@@ -1,7 +1,8 @@
-from MojeOknoKilkaZPM import MojeOknoKilkaZPM
-from MyMath import Wektor
-from UkladyPunktowMaterialnych import Wlos, LinaZPodlozem
 from visual import *
+
+from Fizyka.MojeOknoKilkaZPM import MojeOknoKilkaZPM
+from Fizyka.MyMath import Wektor
+from Fizyka.UkladyPunktowMaterialnych import Wlos, LinaZPodlozem
 
 
 def zbuduj_wlos(x=0.0, y=0.0, z=0.0,

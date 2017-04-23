@@ -1,7 +1,8 @@
-from MojeOkno import MojeOkno
-from MyMath import Wektor
-from UkladyPunktowMaterialnych import LinaZPodlozem
 from visual import *
+
+from Fizyka.MojeOkno import MojeOkno
+from Fizyka.MyMath import Wektor
+from Fizyka.UkladyPunktowMaterialnych import LinaZPodlozem
 
 ilosc = 20
 wspolczynnik_sprezystosci = 10

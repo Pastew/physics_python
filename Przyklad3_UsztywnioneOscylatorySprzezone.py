@@ -1,5 +1,5 @@
-from MojeOkno import MojeOkno
-from UkladyPunktowMaterialnych import Lina, OscylatorySprzezone, UsztywnioneOscylatorySprzezone
+from Fizyka.MojeOkno import MojeOkno
+from Fizyka.UkladyPunktowMaterialnych import UsztywnioneOscylatorySprzezone
 
 ilosc = 10
 wspolczynnik_sprezystosci = 0

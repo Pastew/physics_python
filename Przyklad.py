@@ -1,4 +1,4 @@
-from MojeOkno import MojeOkno
+from Fizyka.MojeOkno import MojeOkno
 
 moje_okno = MojeOkno()
 moje_okno.glowna_petla()
