@@ -49,6 +49,7 @@ for i in range(0, 8):
                             sprezystosc=random.random() * 5 + 5,
                             sztywnosc=random.random() * 80 + 50)
                 )
+    zpms[i].poziom_podloza_y = 0.0
 
 ilosc = 20
 wspolczynnik_sprezystosci = 10

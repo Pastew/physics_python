@@ -82,7 +82,12 @@ class ZbiorPunktowMaterialnych(object):
         if indeks >= 0 and indeks < self.ilosc:
             self.wiezy[indeks] = ustalona_pozycja
 
-    def pobierz_polozenia_kolejnych_punktow(self):
+    # Zwraca polozenia kolejnych punktow, na przyklad dla 4 elementowego zpm:
+    # [[x1,y1,z1],
+    #  [x2,y2,z2],
+    #  [x3,y3,z3],
+    #  [x4,y4,z4]]
+    def pobierz_polozenia_kolejnych_punktow_xyz(self):
         polozenia = []
         for i in range(self.ilosc):
             punkt = self.pobierz_punkt_materialny(i)
