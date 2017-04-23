@@ -41,7 +41,7 @@ def zbuduj_wlos(x=0.0, y=0.0, z=0.0,
 
 
 zpms = []
-for i in range(0, 10):
+for i in range(0, 8):
     zpms.append(zbuduj_wlos(x=random.random() * 2,
                             z=random.random() * 2,
                             ilosc=random.random() * 8 + 2,
