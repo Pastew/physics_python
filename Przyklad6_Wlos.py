@@ -30,5 +30,5 @@ box(pos=[0, 0, 0], height=0.5, width=5, length=10)
 
 moje_okno = MojeOkno(zpm)
 #moje_okno.schowaj_punkty()
-moje_okno.linie.color = [0.8, 0.2, 0.2]
+moje_okno.kolor_linii([0.8, 0.2, 0.2])
 moje_okno.glowna_petla()

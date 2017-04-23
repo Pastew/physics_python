@@ -1,6 +1,6 @@
 from visual import *
 
-from Fizyka.MojeOknoKilkaZPM import MojeOknoKilkaZPM
+from Fizyka.MojeOkno import MojeOkno
 from Fizyka.MyMath import Wektor
 from Fizyka.UkladyPunktowMaterialnych import Wlos, LinaZPodlozem
 
@@ -67,7 +67,7 @@ zpms.append(lina_z_podlozem)
 
 box(pos=[0, -0.25, 0], height=0.5, width=5, length=20)
 
-moje_okno = MojeOknoKilkaZPM(zpms)
+moje_okno = MojeOkno(zpms)
 # moje_okno.schowaj_punkty()
 moje_okno.grubosc_linii(0.025)
 moje_okno.glowna_petla()
