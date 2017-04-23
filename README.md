@@ -12,3 +12,8 @@ cd <project_dir>
 C:\Python27\python setup.py py2exe (or run build.bat)
 (Modify setup.py file before that)
 Copy all tga files from tgas dir of this repo to dist directory (where .exe file was generated)
+
+## Przyklad7
+![Przyklad7](/screenshots/przyklad7.PNG)
+## Przyklad8
+![Przyklad8](/screenshots/przyklad8.PNG)
