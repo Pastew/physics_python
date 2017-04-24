@@ -140,7 +140,7 @@ class PunktMaterialny:
         przyspieszenie = sila / self.masa
 
         if algorytm == Algorytm.EULER:
-            self.przygotuj_ruch_euler()
+            self.przygotuj_ruch_euler(przyspieszenie, krok_czasowy)
         elif algorytm == Algorytm.VERLET:
             self.przygotuj_ruch_verlet(przyspieszenie, krok_czasowy)
 

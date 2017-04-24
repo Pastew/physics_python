@@ -8,8 +8,8 @@ from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, Usztywnion
 
 
 class Symulacja(object):
-    def __init__(self, zpms=None, rysuj_linie=True, przesun_do_srodka_masy=False):
-        self.algorytm = Algorytm.VERLET
+    def __init__(self, zpms=None, rysuj_linie=True, algorytm=Algorytm.VERLET, przesun_do_srodka_masy=False):
+        self.algorytm = algorytm
         self.poprzedni_czas = 0.0
         self.pauza = False
         self.typ_rzutowania = False
