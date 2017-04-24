@@ -6,14 +6,41 @@ from visual import *
 from Fizyka.MyMath import Wektor
 
 
+class KrzywaLissajous(ZbiorPunktowMaterialnych):
+    def __init__(self, k1=4, k2=9.0, punkt_poczatkowy=Wektor(-1, -1, 0)):
+        self.k1 = k1
+        self.k2 = k2
+        super(KrzywaLissajous, self).__init__(1)
+
+        punkt = self.pobierz_punkt_materialny(0)
+        punkt.ustaw_promien(0.1)
+        punkt.ustaw_polozenie(punkt_poczatkowy)
+        # punkt.ustaw_predkosc(Wektor(1, 2, 0))
+        punkt.ustaw_kolor(0, 0.5, 1)
+        punkt.ustaw_promien(random.random() * 0.3)
+
+        punkt.sphere.visible = False
+        punkt.promien = 0.1
+        punkt.sphere = sphere(radius=punkt.promien,
+                              pos=[punkt.polozenie.x, punkt.polozenie.y, punkt.polozenie.z],
+                              color=[punkt.kolor.r, punkt.kolor.g, punkt.kolor.b],
+                              make_trail=True, trail_type="curve",
+                              interval=1, retain=500
+                              )
+
+    def sila(self, i):
+        return Wektor(self.pobierz_punkt_materialny(0).polozenie.x * -self.k1,
+                      self.pobierz_punkt_materialny(0).polozenie.y * -self.k2,
+                      0)
+
+
 class Oscylator(ZbiorPunktowMaterialnych):
     def __init__(self, k=1.0):
         self.k = k
-
         super(Oscylator, self).__init__(1)
 
         punkt = self.pobierz_punkt_materialny(0)
-        punkt.ustaw_polozenie(Wektor(-1, 0, 0))
+        punkt.ustaw_polozenie(Wektor(-1, 0.5, 0))
         punkt.ustaw_predkosc(Wektor(1, 1, 0))
         punkt.ustaw_kolor(0, 0.5, 1)
         punkt.ustaw_promien(random.random() * 0.3)
@@ -158,7 +185,7 @@ class Lina(UsztywnioneOscylatorySprzezone):
                                    dlugosc)
 
         self.g = Wektor(0, -9.81, 0)
-        self.sprezystoscTylkoPrzyRozciaganiu = False
+        self.sprezystoscTylkoPrzyRozciaganiu = True
         for i in range(0, self.ilosc):
             punkt = self.pobierz_punkt_materialny(i)
             punkt.ustaw_predkosc(Wektor(0, 0, 0))

@@ -16,5 +16,5 @@ zpm = LinaOddzialywaniaZDalszymiSasiadami(ilosc, wspolczynnik_sprezystosci,
                                           wspolczynnik_sztywnosci, dlugosc,
                                           ile_dodatkowych_oddzialywan)
 
-moje_okno = Symulacja(zpm)
-moje_okno.glowna_petla()
+symulacja = Symulacja(zpm)
+symulacja.glowna_petla()

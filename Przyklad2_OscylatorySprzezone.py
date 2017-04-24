@@ -12,5 +12,5 @@ zpm = OscylatorySprzezone(ilosc, wspolczynnik_sprezystosci,
                           wspolczynnik_tlumienia_oscylacji,
                           dlugosc)
 
-moje_okno = Symulacja(zpm)
-moje_okno.glowna_petla()
+symulacja = Symulacja(zpm)
+symulacja.glowna_petla()

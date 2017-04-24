@@ -4,7 +4,7 @@ from Fizyka.Symulacja import Symulacja
 from Fizyka.MyMath import Wektor
 from Fizyka.UkladyPunktowMaterialnych import Wlos, LinaZPodlozem
 
-
+# Tu jest pokazane jak zamiescic wiecej niz jeden zbior punktow materialnych na jednej scenie
 def zbuduj_wlos(x=0.0, y=0.0, z=0.0,
                 ilosc=10,
                 sprezystosc=10,
@@ -68,7 +68,7 @@ zpms.append(lina_z_podlozem)
 
 box(pos=[0, -0.25, 0], height=0.5, width=5, length=20)
 
-moje_okno = Symulacja(zpms)
-# moje_okno.schowaj_punkty()
-moje_okno.grubosc_linii(0.025)
-moje_okno.glowna_petla()
+symulacja = Symulacja(zpms)
+# symulacja.schowaj_punkty()
+symulacja.grubosc_linii(0.025)
+symulacja.glowna_petla()

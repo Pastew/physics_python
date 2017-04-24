@@ -1,7 +1,4 @@
-# Ten przyklad nie dziala. Chyba sily sztywnosci sa zle zaimplementowane
-
 from visual import *
-
 from Fizyka.Symulacja import Symulacja
 from Fizyka.MyMath import Wektor
 from Fizyka.UkladyPunktowMaterialnych import Wlos
@@ -28,7 +25,7 @@ for i in range(0, zpm.ilosc):
 
 box(pos=[0, 0, 0], height=0.5, width=5, length=10)
 
-moje_okno = Symulacja(zpm)
-#moje_okno.schowaj_punkty()
-moje_okno.kolor_linii([0.8, 0.2, 0.2])
-moje_okno.glowna_petla()
+symulacja = Symulacja(zpm)
+# symulacja.schowaj_punkty()
+symulacja.kolor_linii([0.8, 0.2, 0.2])
+symulacja.glowna_petla()

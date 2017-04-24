@@ -117,7 +117,15 @@ class PunktMaterialny:
 
         self.sphere = sphere(radius=self.promien,
                              pos=[self.polozenie.x, self.polozenie.y, self.polozenie.z],
-                             color=[self.kolor.r, self.kolor.g, self.kolor.b])
+                             color=[self.kolor.r, self.kolor.g, self.kolor.b]
+                             )
+
+        # self.sphere = sphere(radius=self.promien,
+        #                      pos=[self.polozenie.x, self.polozenie.y, self.polozenie.z],
+        #                      color=[self.kolor.r, self.kolor.g, self.kolor.b],
+        #                      make_trail=True, trail_type="curve",
+        #                      interval=1, retain=500
+        #                      )
 
     # Moze lepiej funkcje rysujace oddzielic od fizyki.
     # Ale jakby co to tak mozna narysowac punkt materialny:

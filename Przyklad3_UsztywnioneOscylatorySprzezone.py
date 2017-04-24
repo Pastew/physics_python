@@ -8,13 +8,12 @@ wspolczynnik_tlumienia_oscylacji = 0
 wspolczynnik_sztywnosci = 1
 dlugosc = 4
 
-# zpm = UsztywnioneOscylatorySprzezone(ilosc,
-#                                     wspolczynnik_sprezystosci,
-#                                     wspolczynnik_tlumienia,
-#                                     wspolczynnik_tlumienia_oscylacji,
-#                                     wspolczynnik_sztywnosci,
-#                                     dlugosc)
+zpm = UsztywnioneOscylatorySprzezone(ilosc,
+                                     wspolczynnik_sprezystosci,
+                                     wspolczynnik_tlumienia,
+                                     wspolczynnik_tlumienia_oscylacji,
+                                     wspolczynnik_sztywnosci,
+                                     dlugosc)
 
-zpm = UsztywnioneOscylatorySprzezone(10, 0, 0, 0, 1, 4)
-moje_okno = Symulacja(zpm)
-moje_okno.glowna_petla()
+symulacja = Symulacja(zpm)
+symulacja.glowna_petla()

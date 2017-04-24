@@ -45,6 +45,7 @@ class Symulacja(object):
                                          color=[0.2, 0.2, 0.2]))
 
         self.trzymany_punkt = self.zpms[0].pobierz_punkt_materialny(0)
+        self.trzymany_punkt.indeks = 0
 
     def obsluz_klawiature(self):
         if scene.kb.keys:
@@ -52,25 +53,29 @@ class Symulacja(object):
             zpm = self.zpms[0]
             zmiana_polozenia = 0.1
             if s == 'e':
-                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, zmiana_polozenia, 0))
+                self.trzymany_punkt.polozenie += Wektor(0, zmiana_polozenia, 0)
             if s == 'q':
-                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, -zmiana_polozenia, 0))
+                self.trzymany_punkt.polozenie += Wektor(0, -zmiana_polozenia, 0)
             if s == 'a':
-                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(-zmiana_polozenia, 0, 0))
+                self.trzymany_punkt.polozenie += Wektor(-zmiana_polozenia, 0, 0)
             if s == 'd':
-                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(zmiana_polozenia, 0, 0))
+                self.trzymany_punkt.polozenie += Wektor(zmiana_polozenia, 0, 0)
             if s == 'w':
-                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, 0, -zmiana_polozenia))
+                self.trzymany_punkt.polozenie += Wektor(0, 0, -zmiana_polozenia)
             if s == 's':
-                self.trzymany_punkt.ustaw_polozenie(self.trzymany_punkt.polozenie + Wektor(0, 0, zmiana_polozenia))
+                self.trzymany_punkt.polozenie += Wektor(0, 0, zmiana_polozenia)
+            if s == 'x':
+                # skok
+                self.trzymany_punkt.predkosc += Wektor(0, -200, 0)
             if s == 'm':
-                zpm.ustaw_wiezy(0, not zpm.wiezy[0])
+                zpm.ustaw_wiezy(self.trzymany_punkt.indeks, not zpm.wiezy[self.trzymany_punkt.indeks])
 
             nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
             if s in nums:
                 print(s)
-                zpm.ustaw_wiezy(int(s), not zpm.wiezy[int(s)])
+                #zpm.ustaw_wiezy(int(s), not zpm.wiezy[int(s)])
                 self.trzymany_punkt = zpm.pobierz_punkt_materialny(int(s))
+                self.trzymany_punkt.indeks = int(s)
         pass
 
     def glowna_petla(self):
