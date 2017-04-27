@@ -49,6 +49,11 @@ class ZbiorPunktowMaterialnych(object):
         pass
 
     def po_kroku_naprzod(self, krok_czasowy):
+        for p in self.punkty:
+            if p.do_usuniecia:
+                del p.sphere
+                self.punkty.remove(p)
+                self.ilosc -= 1
         pass
 
     def srodek_masy(self):
@@ -100,6 +105,16 @@ class ZbiorPunktowMaterialnych(object):
         for p in self.punkty:
             p.polozenie += wektor
 
+    def dodaj_punkt(self, punkt):
+        self.ilosc += 1
+        self.punkty.append(punkt)
+        self.wiezy.append(False)
+
+    def usun_punkt_materialny(self, i):
+        p = self.pobierz_punkt_materialny(i)
+        p.sphere.visible = False
+        p.do_usuniecia = True
+
 
 class PunktMaterialny:
     numer_kroku = 0
@@ -120,6 +135,7 @@ class PunktMaterialny:
                              color=[self.kolor.r, self.kolor.g, self.kolor.b]
                              )
 
+        self.do_usuniecia = False
         # self.sphere = sphere(radius=self.promien,
         #                      pos=[self.polozenie.x, self.polozenie.y, self.polozenie.z],
         #                      color=[self.kolor.r, self.kolor.g, self.kolor.b],

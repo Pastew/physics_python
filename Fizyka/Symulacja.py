@@ -33,6 +33,13 @@ class Symulacja(object):
             print("Podaj jakis zpm")
             exit()
 
+        # TODO przerobic to na klase uklad wspolrzednych.
+        self.punkt0 = None
+        self.arrow_x = None
+        self.arrow_y = None
+        self.arrow_z = None
+        self.rysuj_uklad_wspolrzednych()
+
         self.rysuj_linie = rysuj_linie
         if self.rysuj_linie:
             self.linie = []
@@ -83,7 +90,6 @@ class Symulacja(object):
         biezaca_klatka = 0.0  # Time of the current frame
         nastepna_klatla = biezaca_klatka + self.czas_pomiedzy_dwoma_klatkami  # Time of the next frame
         ostatni_czas = biezaca_klatka  # Time of the last update of the fps counter
-        self.rysuj_uklad_wspolrzednych()
 
         while 1:
             rate(self.fps)
@@ -126,12 +132,19 @@ class Symulacja(object):
                     self.rysuj_zpm_linie(i, self.zpms[i], jednostka_dlugosci)
 
     def rysuj_uklad_wspolrzednych(self):
-        sphere(pos=[0, 0, 0], color=[1, 1, 1], radius=0.05)
+        self.punkt0 = sphere(pos=[0, 0, 0], color=[1, 1, 1], radius=0.05)
         arrow_pos = [0, 0, 0]
         arrow_length = 0.4
-        arrow(pos=arrow_pos, axis=[arrow_length, 0, 0], color=[1, 0.2, 0.3])
-        arrow(pos=arrow_pos, axis=[0, arrow_length, 0], color=[0.2, 1, 0.3])
-        arrow(pos=arrow_pos, axis=[0, 0, arrow_length], color=[0.5, 0.5, 1])
+        self.arrow_x = arrow(pos=arrow_pos, axis=[arrow_length, 0, 0], color=[1, 0.2, 0.3])
+        self.arrow_y = arrow(pos=arrow_pos, axis=[0, arrow_length, 0], color=[0.2, 1, 0.3])
+        self.arrow_z = arrow(pos=arrow_pos, axis=[0, 0, arrow_length], color=[0.5, 0.5, 1])
+
+    def schowaj_uklad_wspolrzednych(self):
+        self.punkt0.visible = False
+        self.arrow_x.visible = False
+        self.arrow_y.visible = False
+        self.arrow_z.visible = False
+
 
     def rysuj_zpm(self, zpm=None, jednostka_dlugosci=1.0):
         if self.przesun_do_srodka_masy:

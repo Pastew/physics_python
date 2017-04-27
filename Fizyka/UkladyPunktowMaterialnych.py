@@ -1,9 +1,73 @@
 from random import random
 
-from PunktMaterialny import ZbiorPunktowMaterialnych
+from PunktMaterialny import ZbiorPunktowMaterialnych, PunktMaterialny
 from visual import *
 
 from Fizyka.MyMath import Wektor
+
+
+class Iskry(ZbiorPunktowMaterialnych):
+    def __init__(self):
+        super(Iskry, self).__init__(1)
+
+        self.WYMAGANY_CZAS = 1/30.0
+        self.czas_do_stworzenia_nowej_iskry = self.WYMAGANY_CZAS  # raz na sekunde
+
+        iskra = self.pobierz_punkt_materialny(0)
+        iskra.ustaw_promien(0.05)
+        iskra.ustaw_kolor(0.9, 0.3, 0.1)
+        iskra.ustaw_polozenie(Wektor(0, 0, 0))
+        iskra.wiek = 0
+        iskra.czas_zycia = 0.001
+        iskra.sphere.visible = False
+        iskra.temperatura = random.random() * 600 + 400
+        iskra.ustaw_predkosc(Wektor(random.random()*0.4-0.2, 0.4, random.random()*0.4-0.2))
+
+    def po_kroku_naprzod(self, krok_czasowy):
+        self.czas_do_stworzenia_nowej_iskry -= krok_czasowy
+
+        for i in range(0, self.ilosc):
+            p = self.pobierz_punkt_materialny(i)
+            p.wiek += krok_czasowy
+            if p.wiek > p.czas_zycia:
+                self.usun_punkt_materialny(i)
+            else:
+                p.temperatura -= random.random() * 10
+               # p.sphere.opacity = p.temperatura / 800.0
+                p.ustaw_kolor(p.temperatura/1000.0, 0.1, 1.0-p.temperatura/800.0)
+
+        if self.czas_do_stworzenia_nowej_iskry < 0:
+            self.czas_do_stworzenia_nowej_iskry = self.WYMAGANY_CZAS
+            self.stworz_nowa_iskre()
+
+        super(Iskry, self).po_kroku_naprzod(krok_czasowy)
+
+    def sila(self, i):
+        p = self.pobierz_punkt_materialny(i)
+        predkosc_przeplywu = Wektor(0, 0.9, 0)
+        lepkosc = 3.9
+        r = p.promien
+        return (p.predkosc - predkosc_przeplywu) * (6 * 3.14 * lepkosc * r * -1.0)
+
+    def stworz_nowa_iskre(self):
+        iskra = PunktMaterialny()
+        iskra.ustaw_promien(0.01)
+        iskra.ustaw_kolor(0.9, 0.1, 0.1)
+        iskra.ustaw_polozenie(Wektor(0, 0, 0))
+        iskra.wiek = 0
+        iskra.czas_zycia = random.random()*3+1
+        iskra.temperatura = random.random() * 600 + 400
+
+        max_polozenie_na_boki = 0.3
+        iskra.ustaw_polozenie(Wektor(random.random()*max_polozenie_na_boki-max_polozenie_na_boki/2.0,
+                                     0,
+                                     random.random()*max_polozenie_na_boki-max_polozenie_na_boki/2.0))
+        max_predkosc_na_boki = 0.6
+        iskra.ustaw_predkosc(Wektor(random.random()*max_predkosc_na_boki-max_predkosc_na_boki/2.0,
+                                    0.0,
+                                    random.random()*max_predkosc_na_boki-max_predkosc_na_boki/2.0))
+        self.dodaj_punkt(iskra)
+        return iskra
 
 
 class KrzywaLissajous(ZbiorPunktowMaterialnych):
