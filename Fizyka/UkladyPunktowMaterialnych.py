@@ -1,6 +1,7 @@
 from random import random
 
-from PunktMaterialny import ZbiorPunktowMaterialnych, PunktMaterialny
+from PunktMaterialny import ZbiorPunktowMaterialnych, PunktMaterialny, ObszarZabroniony, \
+    ZbiorPunktowMaterialnychZObszaremZabronionym
 from visual import *
 
 from Fizyka.MyMath import Wektor
@@ -10,7 +11,7 @@ class Iskry(ZbiorPunktowMaterialnych):
     def __init__(self):
         super(Iskry, self).__init__(1)
 
-        self.WYMAGANY_CZAS = 1/30.0
+        self.WYMAGANY_CZAS = 1 / 30.0
         self.czas_do_stworzenia_nowej_iskry = self.WYMAGANY_CZAS  # raz na sekunde
 
         iskra = self.pobierz_punkt_materialny(0)
@@ -21,7 +22,7 @@ class Iskry(ZbiorPunktowMaterialnych):
         iskra.czas_zycia = 0.001
         iskra.sphere.visible = False
         iskra.temperatura = random.random() * 600 + 400
-        iskra.ustaw_predkosc(Wektor(random.random()*0.4-0.2, 0.4, random.random()*0.4-0.2))
+        iskra.ustaw_predkosc(Wektor(random.random() * 0.4 - 0.2, 0.4, random.random() * 0.4 - 0.2))
 
     def po_kroku_naprzod(self, krok_czasowy):
         self.czas_do_stworzenia_nowej_iskry -= krok_czasowy
@@ -33,8 +34,8 @@ class Iskry(ZbiorPunktowMaterialnych):
                 self.usun_punkt_materialny(i)
             else:
                 p.temperatura -= random.random() * 10
-               # p.sphere.opacity = p.temperatura / 800.0
-                p.ustaw_kolor(p.temperatura/1000.0, 0.1, 1.0-p.temperatura/800.0)
+                # p.sphere.opacity = p.temperatura / 800.0
+                p.ustaw_kolor(p.temperatura / 1000.0, 0.1, 1.0 - p.temperatura / 800.0)
 
         if self.czas_do_stworzenia_nowej_iskry < 0:
             self.czas_do_stworzenia_nowej_iskry = self.WYMAGANY_CZAS
@@ -55,17 +56,17 @@ class Iskry(ZbiorPunktowMaterialnych):
         iskra.ustaw_kolor(0.9, 0.1, 0.1)
         iskra.ustaw_polozenie(Wektor(0, 0, 0))
         iskra.wiek = 0
-        iskra.czas_zycia = random.random()*3+1
+        iskra.czas_zycia = random.random() * 3 + 1
         iskra.temperatura = random.random() * 600 + 400
 
         max_polozenie_na_boki = 0.3
-        iskra.ustaw_polozenie(Wektor(random.random()*max_polozenie_na_boki-max_polozenie_na_boki/2.0,
+        iskra.ustaw_polozenie(Wektor(random.random() * max_polozenie_na_boki - max_polozenie_na_boki / 2.0,
                                      0,
-                                     random.random()*max_polozenie_na_boki-max_polozenie_na_boki/2.0))
+                                     random.random() * max_polozenie_na_boki - max_polozenie_na_boki / 2.0))
         max_predkosc_na_boki = 0.6
-        iskra.ustaw_predkosc(Wektor(random.random()*max_predkosc_na_boki-max_predkosc_na_boki/2.0,
+        iskra.ustaw_predkosc(Wektor(random.random() * max_predkosc_na_boki - max_predkosc_na_boki / 2.0,
                                     0.0,
-                                    random.random()*max_predkosc_na_boki-max_predkosc_na_boki/2.0))
+                                    random.random() * max_predkosc_na_boki - max_predkosc_na_boki / 2.0))
         self.dodaj_punkt(iskra)
         return iskra
 
@@ -353,3 +354,77 @@ class LinaZPodlozem(Lina):
             sila += punkt.predkosc * (-2 * sp)
 
         return sila
+
+
+class Podloze(ObszarZabroniony):
+    def __init__(self, wspolczynnik_odbicia=0.2, wspolczynnik_tarcia=0.1, poziom_y=0.0):
+        super(Podloze, self).__init__(wspolczynnik_odbicia, wspolczynnik_tarcia)
+        self.poziom_y = poziom_y
+
+    def czy_w_obszarze_zabronionym(self, polozenie, poprzednie_polozenie, margines, normalna):
+        wynik = (polozenie + margines < self.poziom_y)
+        if not normalna == None:
+            normalna = Wektor(0, 1, 0)
+
+        return wynik
+
+
+class Kula(ObszarZabroniony):
+    def __init__(self, wspolczynnik_odbicia, wspolczynnik_tarcia, srodek=Wektor(), promien=0.1):
+        super(Kula, self).__init__(wspolczynnik_odbicia, wspolczynnik_tarcia)
+        self.srodek = srodek
+        self.promien = promien
+
+    def czy_w_obszarze_zabronionym(self, polozenie, poprzednie_polozenie, margines, normalna):
+        wektor_promienia = polozenie - self.srodek
+        wynik = wektor_promienia.dlugosc() < self.promien + margines
+
+        if wynik and normalna is not None:
+            normalna = wektor_promienia
+            normalna.normuj()
+            return wynik, normalna
+
+        return wynik
+
+
+class PunktyUderzajaceWKule(ZbiorPunktowMaterialnychZObszaremZabronionym):
+    def __init__(self, ilosc):
+        super(PunktyUderzajaceWKule, self).__init__(ilosc)
+        self.polozenie_x_min = -0.74
+        self.polozenie_x_max = 0.74
+        self.polozenie_y_min = 1.74
+        self.polozenie_y_max = 2.74
+        self.polozenie_z_min = -0.74
+        self.polozenie_z_max = 0.74
+        self.predkosc_x_min = 1.2
+        self.predkosc_x_max = 2.4
+
+        self.obszar_zabroniony = Kula(0.1, 0.2, Wektor(2.5, 0, 0), 1)
+
+        for i in range(0, ilosc):
+            polozenie_x = random.random() * (self.polozenie_x_max - self.polozenie_x_min) + self.polozenie_x_min
+            polozenie_y = random.random() * (self.polozenie_y_max - self.polozenie_y_min) + self.polozenie_y_min
+            polozenie_z = random.random() * (self.polozenie_z_max - self.polozenie_z_min) + self.polozenie_z_min
+            predkosc_x = random.random() * (self.predkosc_x_max - self.predkosc_x_min) + self.predkosc_x_min
+            punkt = self.pobierz_punkt_materialny(i)
+            punkt.ustaw_polozenie(Wektor(polozenie_x, polozenie_y, polozenie_z))
+            punkt.ustaw_predkosc(Wektor(predkosc_x, 0, 0))
+
+    def sila(self, indeks):
+        return Wektor(0, -1.81, 0)
+
+
+class LinaZPodlozem2(Lina):
+    def __init__(self, ilosc,
+                 wspolczynnik_sprezystosci,
+                 wspolczynnik_tlumienia, wpolczynnik_tlumienia_oscylacji,
+                 wspolczynnik_sztywnosci,
+                 dlugosc,
+                 poziom_podloza_y=-1.0):
+        super(LinaZPodlozem2, self).__init__(ilosc,
+                                             wspolczynnik_sprezystosci,
+                                             wspolczynnik_tlumienia, wpolczynnik_tlumienia_oscylacji,
+                                             wspolczynnik_sztywnosci,
+                                             dlugosc)
+
+        self.obszar_zabroniony = Podloze(0, 0.1, poziom_podloza_y)

@@ -116,6 +116,79 @@ class ZbiorPunktowMaterialnych(object):
         p.do_usuniecia = True
 
 
+class ObszarZabroniony(object):
+    def __init__(self, wspolczynnik_odbicia=0.3, wspolczynnik_tarcia=0.1):
+        self.wspolczynnik_odbicia = wspolczynnik_odbicia
+        self.wspolczynnik_tarcia = wspolczynnik_tarcia
+
+    def czy_w_obszarze_zabronionym(self, polozenie, poprzednie_polozenie, margines, normalna):
+        return None
+
+
+class ZbiorPunktowMaterialnychZObszaremZabronionym(ZbiorPunktowMaterialnych):
+    def __init__(self, ilosc):
+        super(ZbiorPunktowMaterialnychZObszaremZabronionym, self).__init__(ilosc)
+        self.obszar_zabroniony = None
+        self.zaznacz_kontakt_punktu_z_obszarem_zabronionym = True
+
+    def przygotuj_ruch(self, krok_czasowy, algorytm=Algorytm.VERLET):
+        for i in range(self.ilosc):
+            if self.wiezy[i] is False:
+                self.punkty[i].przygotuj_ruch(self.sila(i), krok_czasowy, algorytm)
+                if not self.obszar_zabroniony is None and self.obszar_zabroniony.czy_w_obszarze_zabronionym(
+                        self.punkty[i].nastepne_polozenie,
+                        self.punkty[i].poprzednie_polozenie,
+                        self.punkty[i].promien,
+                        None):
+                    self.przygotuj_ruch_przy_kontakcie_z_obszarem_zabronionym(i, krok_czasowy)
+                    if self.zaznacz_kontakt_punktu_z_obszarem_zabronionym:
+                        self.punkty[i].ustaw_kolor(1, 0, 0)
+
+                else:
+                    if self.zaznacz_kontakt_punktu_z_obszarem_zabronionym:
+                        self.punkty[i].ustaw_kolor(0, 1, 0)
+
+    def przygotuj_ruch_przy_kontakcie_z_obszarem_zabronionym(self, indeks, krok_czasowy):
+        if self.obszar_zabroniony is None:
+            return
+
+        punkt = self.pobierz_punkt_materialny(indeks)
+        normalna = Wektor()
+
+        # Zakladamy, ze nastepne polozenie jest juz obliczone
+        w_obszarze_zabronionym, normalna = self.obszar_zabroniony.czy_w_obszarze_zabronionym(
+            punkt.nastepne_polozenie,
+            punkt.polozenie,
+            punkt.promien,
+            normalna)
+
+        if w_obszarze_zabronionym:
+            # Eliminacja skladowej normalnej sily
+            sila = self.sila(indeks)
+            skladowa_normalna_sily = normalna * sila
+            if skladowa_normalna_sily < 0:  # usuwanie skladowej sily skierowanej do powierzchni
+                sila -= normalna * skladowa_normalna_sily  # dzialanie sily kontaktowej
+
+            # uwzglednienie odbicia (zmiana aktualnego wektora predkosci)
+            predkosc = punkt.predkosc
+            skladowa_normalna_predkosci = normalna * predkosc
+            if skladowa_normalna_predkosci < 0:  # usuwanie skladowej predkosci skierowanej do powierzchni
+                predkosc -= normalna * ((self.obszar_zabroniony.wspolczynnik_odbicia + 1) * skladowa_normalna_predkosci)
+
+            punkt.ustaw_predkosc(predkosc)
+
+            #tarcie
+            if skladowa_normalna_sily < 0 and predkosc.dlugosc() > 0:
+                tarcie = predkosc * -1
+                tarcie.normuj()
+                tarcie *= math.fabs(self.obszar_zabroniony.wspolczynnik_tarcia * skladowa_normalna_sily)
+                sila += tarcie
+
+            # ponowne przygotowanie ruchu z nowymi sila i predkoscia
+            # musi byc metoda Eulera, bo ta widzi zmiane predkosci
+            punkt.przygotuj_ruch(sila, krok_czasowy, algorytm=Algorytm.EULER)
+
+
 class PunktMaterialny:
     numer_kroku = 0
 

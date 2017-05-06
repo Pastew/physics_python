@@ -1,10 +1,8 @@
 from visual import *
-import threading
 
 from MyMath import Kolor, Wektor
 from PunktMaterialny import Algorytm, ZbiorPunktowMaterialnych
-from UkladyPunktowMaterialnych import Oscylator, OscylatorySprzezone, UsztywnioneOscylatorySprzezone, Lina, \
-    LinaOddzialywaniaZDalszymiSasiadami, Wlos, LinaZPodlozem
+from UkladyPunktowMaterialnych import LinaZPodlozem
 
 
 class Symulacja(object):

@@ -1,6 +1,5 @@
-from Fizyka.MyMath import Wektor
 from Fizyka.Symulacja import Symulacja
-from Fizyka.UkladyPunktowMaterialnych import KrzywaLissajous, Iskry
+from Fizyka.UkladyPunktowMaterialnych import Iskry
 from visual import *
 zpm = Iskry()
 
