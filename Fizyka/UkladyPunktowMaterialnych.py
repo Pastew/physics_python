@@ -399,7 +399,11 @@ class PunktyUderzajaceWKule(ZbiorPunktowMaterialnychZObszaremZabronionym):
         self.predkosc_x_min = 1.2
         self.predkosc_x_max = 2.4
 
-        self.obszar_zabroniony = Kula(0.1, 0.2, Wektor(2.5, 0, 0), 1)
+        wspolczynnik_odbicia = 0.1
+        wspolczynnik_tarcia = 0.2
+        srodek = Wektor(2.5, 0, 0)
+        promien = 1.0
+        self.obszar_zabroniony = Kula(wspolczynnik_odbicia, wspolczynnik_tarcia, srodek, promien)
 
         for i in range(0, ilosc):
             polozenie_x = random.random() * (self.polozenie_x_max - self.polozenie_x_min) + self.polozenie_x_min
