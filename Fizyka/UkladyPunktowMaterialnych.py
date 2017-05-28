@@ -388,6 +388,69 @@ class Kula(ObszarZabroniony):
         return wynik
 
 
+class ProstopadloscianNieograniczonyWKierunkuZ(ObszarZabroniony):
+    def __init__(self, wspolczynnik_odbicia, wspolczynnik_tarcia, minX, maxX, minY, maxY):
+        super(ProstopadloscianNieograniczonyWKierunkuZ, self).__init__(wspolczynnik_odbicia, wspolczynnik_tarcia)
+        self.minX = minX
+        self.maxX = maxX
+        self.minY = minY
+        self.maxY = maxY
+
+    def pobierz_rozmiar(self):
+        return Wektor(self.maxX - self.minX, self.maxY - self.minY, 0)
+
+    def pobierz_srodek(self):
+        return Wektor((self.maxX + self.minX) / 2, (self.maxY + self.minY) / 2, 0)
+
+    def czy_w_obszarze_zabronionym(self, polozenie, poprzednie_polozenie, margines, normalna):
+        _minX = self.minX - margines
+        _maxX = self.maxX + margines
+        _minY = self.minY - margines
+        _maxY = self.maxY + margines
+
+        wynik = _minX < polozenie.x < _maxX and _minY < polozenie.y < _maxY
+
+        if wynik and (not normalna is None):
+
+            przemieszczenie = polozenie - poprzednie_polozenie
+            if przemieszczenie.x != 0:
+                normalna = Wektor(0, 0, 0)
+
+                # prosta y=ax + b
+                a = przemieszczenie.y / przemieszczenie.x
+                b = polozenie.y - a * polozenie.x
+                # przeciecie z lewa krawedzia
+                y_minX = a * _minX + b
+                if _minY <= y_minX < _maxY and poprzednie_polozenie.x < _minX:
+                    normalna.x = -1
+
+                # przeciecie z prawa krawedzia
+                y_maxX = a * _maxX + b
+                if _minY <= y_maxX <= _maxY and poprzednie_polozenie.x > _maxX:
+                    normalna.x = 1
+
+                # przeciecie z gorna krawedzia
+                x_maxY = (_maxY - b) / a
+                if _minX <= x_maxY <= _maxX and poprzednie_polozenie.y > _maxY:
+                    normalna.y = 1
+
+                # przeciecie z dolna krawedzia
+                x_minY = (_minY - b) / a
+                if _minX <= x_minY <= _maxX and poprzednie_polozenie.y < _minY:
+                    normalna.y = -1
+            else:
+                if przemieszczenie.y > 0:
+                    normalna = Wektor(0, -1, 0)
+                else:
+                    normalna = Wektor(0, 1, 0)
+
+            print(normalna)
+
+            return wynik, normalna
+
+        return wynik
+
+
 class PunktyUderzajaceWKule(ZbiorPunktowMaterialnychZObszaremZabronionym):
     def __init__(self, ilosc):
         super(PunktyUderzajaceWKule, self).__init__(ilosc)
@@ -433,3 +496,20 @@ class LinaZPodlozem2(Lina):
                                              dlugosc)
 
         self.obszar_zabroniony = Podloze(0.1, 0.1, poziom_podloza_y)
+
+
+class LinaZProstopadloscianemNieograniczonymWKierunkuZ(Lina):
+    def __init__(self, ilosc,
+                 wspolczynnik_sprezystosci,
+                 wspolczynnik_tlumienia, wpolczynnik_tlumienia_oscylacji,
+                 wspolczynnik_sztywnosci,
+                 dlugosc):
+        super(LinaZProstopadloscianemNieograniczonymWKierunkuZ, self).__init__(ilosc,
+                                                                               wspolczynnik_sprezystosci,
+                                                                               wspolczynnik_tlumienia,
+                                                                               wpolczynnik_tlumienia_oscylacji,
+                                                                               wspolczynnik_sztywnosci,
+                                                                               dlugosc)
+
+        self.obszar_zabroniony = ProstopadloscianNieograniczonyWKierunkuZ(0, 0, -1, 1, -3.75, -0.25)
+        self.ustaw_wiezy(0, false)
