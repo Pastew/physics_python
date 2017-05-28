@@ -73,7 +73,7 @@ class ZbiorPunktowMaterialnych(object):
             else:
                 ilosc_z_wiezami += 1
 
-        predkosc_srednia /= self.ilosc - ilosc_z_wiezami
+        predkosc_srednia /= (self.ilosc - ilosc_z_wiezami)
 
     def pobierz_punkt_materialny(self, i):
         if i < 0 or i >= self.ilosc:

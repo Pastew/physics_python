@@ -5,6 +5,7 @@ from PunktMaterialny import ZbiorPunktowMaterialnych, PunktMaterialny, ObszarZab
 from visual import *
 
 from Fizyka.MyMath import Wektor
+from Fizyka.MyMath import WersoryKierunkowe
 
 
 class Iskry(ZbiorPunktowMaterialnych):
@@ -551,3 +552,157 @@ class LinaZWalcemNieograniczonymWKierunkuZ(Lina):
         self.obszar_zabroniony = WalecNieograniczonyWKierunkuZ(wspolczynnik_tarcia, wspolczynnik_odbicia,
                                                                srodek_walca, promien)
         self.ustaw_wiezy(0, false)
+
+
+wersory_kierunkowe_2D = WersoryKierunkowe.wersory_kierunkowe_2D
+
+
+class Siatka(ZbiorPunktowMaterialnychZObszaremZabronionym):
+    def __init__(self,
+                 nx, ny,
+                 wspolczynnik_sprezystosci, wspolczynnik_tlumienia,
+                 wspolczynnik_tlumienia_oscylacji, wspolczynnik_sztywnosci,
+                 przyspieszenie_ziemskie,
+                 dlugosc_x, dlugosc_y,
+                 obszar_zabroniony=None):
+
+        super(Siatka, self).__init__(nx * ny)
+        self.co_ktory_sasiad = 1  # 1 - takze po przekatnych (8)
+        # 2- tylko na siatce pion poziom(4)
+
+        self.nx = nx
+        self.ny = ny
+        self.k = wspolczynnik_sprezystosci
+        self.t = wspolczynnik_tlumienia
+        self.tt = wspolczynnik_tlumienia_oscylacji
+        self.s = wspolczynnik_sztywnosci
+        self.lx = float(dlugosc_x) / (nx - 1)
+        self.ly = float(dlugosc_y) / (ny - 1)
+        self.g = przyspieszenie_ziemskie
+        self.obszar_zabroniony = obszar_zabroniony
+        self.sily_sztywnosci = []
+
+        self.sprezystosc_tylko_przy_rozciaganiu = True
+
+        for ix in range(0, nx):
+            for iy in range(0, ny):
+                i = ix + nx * iy
+                self.sily_sztywnosci.append(Wektor(0, 0, 0))
+                punkt = self.pobierz_punkt_materialny(i)
+                punkt.ustaw_polozenie(Wektor(-dlugosc_x / 2 + ix * self.lx, -dlugosc_y / 2 + iy * self.ly, 0))
+                punkt.ustaw_predkosc(Wektor(0, 0, 0))
+                punkt.ustaw_kolor(1, ix / (nx - 1), iy / (ny - 1))
+
+        self.zeruj_predkosc_srednia()
+
+    def przed_krokiem_naprzod(self, krok_czasowy):
+        super(Siatka, self).przed_krokiem_naprzod(krok_czasowy)
+        for i in range(0, self.liczba_punktow()):
+            self.sily_sztywnosci[i] = Wektor(0, 0, 0)
+
+        if self.s == 0:
+            return
+
+        for ix in range(1, self.nx - 1):
+            for iy in range(1, self.ny - 1):
+                indeks = ix + self.nx * iy
+                wektor_wypadkowy_sasiadow = Wektor(0, 0, 0)
+
+                kierunek = 0
+                while kierunek < 8:
+                    nx_sasiada = ix + wersory_kierunkowe_2D[kierunek].x
+                    ny_sasiada = iy + wersory_kierunkowe_2D[kierunek].y
+
+                    if 0 <= nx_sasiada < self.nx and 0 <= ny_sasiada < self.ny:
+                        do_sasiada = self.pobierz_punkt_materialny(
+                            indeks + wersory_kierunkowe_2D[kierunek].x
+                            + self.nx * wersory_kierunkowe_2D[kierunek].y).polozenie \
+                                     - self.pobierz_punkt_materialny(indeks).polozenie
+                        wektor_wypadkowy_sasiadow += do_sasiada
+
+                    kierunek += self.co_ktory_sasiad
+
+                wektor_wypadkowy_sasiadow /= (8.0 / self.co_ktory_sasiad)
+                sila_sztywnosci = wektor_wypadkowy_sasiadow * self.s
+
+                self.sily_sztywnosci[indeks] += sila_sztywnosci
+
+                kierunek = 0
+                while kierunek < 8:
+                    self.sily_sztywnosci[indeks + wersory_kierunkowe_2D[kierunek].x
+                                         + self.nx * wersory_kierunkowe_2D[kierunek].y] \
+                        -= sila_sztywnosci / (8.0 / self.co_ktory_sasiad)
+
+                    kierunek += self.co_ktory_sasiad
+
+    def sila(self, indeks):
+        Nx = self.nx
+        Ny = self.nx
+        nx = indeks % Nx
+        ny = (indeks - nx) / Nx
+
+        sila = Wektor(0, 0, 0)
+        kierunek = 0
+        while kierunek < 8:
+            nxSasiada=nx+WersoryKierunkowe.wersory_kierunkowe_2D[kierunek].x
+            nySasiada=ny+WersoryKierunkowe.wersory_kierunkowe_2D[kierunek].y
+            if nxSasiada >= 0 and nxSasiada < Nx and nySasiada >= 0 and nySasiada < Ny:
+                doSasiada=self.pobierz_punkt_materialny(indeks+WersoryKierunkowe.wersory_kierunkowe_2D[kierunek].x+Nx * WersoryKierunkowe.wersory_kierunkowe_2D[kierunek].y).polozenie-self.pobierz_punkt_materialny(indeks).polozenie
+                odlegloscSpoczynkowa=sqrt((WersoryKierunkowe.wersory_kierunkowe_2D[kierunek].x * self.lx)**2+(WersoryKierunkowe.wersory_kierunkowe_2D[kierunek].y * self.ly)**2)
+                wychylenie=doSasiada.dlugosc()-odlegloscSpoczynkowa
+                if (not self.sprezystosc_tylko_przy_rozciaganiu or wychylenie > 0):
+                    doSasiada.normuj()
+                    sila += doSasiada * (self.k * wychylenie)
+                    roznicaPredkosci=self.pobierz_punkt_materialny(indeks+WersoryKierunkowe.wersory_kierunkowe_2D[kierunek].x+Nx * WersoryKierunkowe.wersory_kierunkowe_2D[kierunek].y).predkosc-self.pobierz_punkt_materialny(indeks).predkosc
+                    sila += doSasiada * (doSasiada * roznicaPredkosci) * self.tt
+            kierunek += self.co_ktory_sasiad
+        if self.t != 0:
+            sila -= self.pobierz_punkt_materialny(indeks).predkosc * self.t  #tlumienie
+        if self.s != 0:
+            sila += self.sily_sztywnosci[indeks]
+        sila += self.g * self.pobierz_punkt_materialny(indeks).masa
+        return sila
+
+    def sila2(self, i):
+        n_x = i % self.nx
+        n_y = (i - n_x) / self.nx
+        print(n_y)
+
+        sila = Wektor(0, 0, 0)
+        kierunek = 0
+        while kierunek < 8:
+            nx_sasiada = n_x + wersory_kierunkowe_2D[kierunek].x
+            ny_sasiada = n_y + wersory_kierunkowe_2D[kierunek].y
+
+            if 0 <= nx_sasiada < self.nx and 0 <= ny_sasiada <= self.ny:
+                do_sasiada = self.pobierz_punkt_materialny(
+                    i + wersory_kierunkowe_2D[kierunek].x
+                    + self.nx * wersory_kierunkowe_2D[kierunek].y).polozenie \
+                             - self.pobierz_punkt_materialny(i).polozenie
+
+                odleglosc_spoczynkowa = math.sqrt((wersory_kierunkowe_2D[kierunek].x * self.lx) ** 2 \
+                                                  + (wersory_kierunkowe_2D[kierunek].y * self.ly) ** 2)
+
+                wychylenie = do_sasiada.dlugosc - odleglosc_spoczynkowa
+
+                if not self.sprezystosc_tylko_przy_rozciaganiu or wychylenie > 0:
+                    do_sasiada.normuj()
+                    sila += do_sasiada * self.k * wychylenie
+                    roznica_predkosci = self.pobierz_punkt_materialny(
+                        i + wersory_kierunkowe_2D[kierunek].x
+                        + self.nx * wersory_kierunkowe_2D[kierunek].y).predkosc \
+                                        - self.pobierz_punkt_materialny(i).predkosc
+
+                    sila += do_sasiada * (do_sasiada * roznica_predkosci) * self.tt
+
+            kierunek += self.co_ktory_sasiad
+
+        if self.t != 0:
+            sila -= self.pobierz_punkt_materialny(i).predkosc * self.t
+
+        if self.s != 0:
+            sila += self.sily_sztywnosci[i]
+
+        sila += self.g * self.pobierz_punkt_materialny(i).masa
+
+        return sila

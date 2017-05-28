@@ -13,6 +13,7 @@ Skopiuj wszystkie pliki .dll z tego repozytorium do C:\Python27\DLLs
 
 Jak zbudowac plik exe:
 ```
+Zmodyfikuj plik setup.py (dopisz nowy przyklad ktory chcesz zbudowac jesli go tam brakuje)
 W command line
 cd <project_dir>
 C:\Python27\python setup.py py2exe

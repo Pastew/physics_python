@@ -70,6 +70,23 @@ class Wektor:
         return [self.x, self.y, self.z]
 
 
+class Wersor:
+    def __init__(self, x=0, y=0, z=0):
+        self.x = int(x)
+        self.y = int(y)
+        self.z = int(z)
+
+
+class WersoryKierunkowe:
+
+    wersory_kierunkowe_2D = [
+    Wersor(0, 1, 0), Wersor(1, 1, 0),
+    Wersor(1, 0, 0), Wersor(1, -1, 0),
+    Wersor(0, -1, 0), Wersor(-1, -1, 0),
+    Wersor(-1, 0, 0), Wersor(-1, 1, 0)
+]
+
+
 class Kolor:
     def __init__(self, r=1.0, g=1.0, b=1.0, a=1.0):
         self.r = r

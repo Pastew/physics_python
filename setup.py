@@ -11,6 +11,8 @@ setup(
              "Przyklad5_LinaOddzialywaniaZDalszymi.py",
              "Przyklad6_Wlos.py",
              "Przyklad7_LinaZPodlozem.py",
-             "Przyklad8_KilkaZPM.py"
+             "Przyklad8_KilkaZPM.py",
+             "Przyklad11LinaWalec.py"
+             "Przyklad12_Siatka.py"
              ],
 )
