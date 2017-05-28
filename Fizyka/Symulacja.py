@@ -16,8 +16,9 @@ class Symulacja(object):
         self.fps = 30.0
         self.czas_pomiedzy_dwoma_klatkami = 1.0 / self.fps
         self.biezacy_czas_pomiedzy_dwoma_klatkami = self.czas_pomiedzy_dwoma_klatkami
-        self.iteracje_fizyki_na_jedna_klatke = 2
+        self.iteracje_fizyki_na_jedna_klatke = 1
         self.delta_czas = self.czas_pomiedzy_dwoma_klatkami / self.iteracje_fizyki_na_jedna_klatke
+        print(self.delta_czas)
 
         if isinstance(zpms, ZbiorPunktowMaterialnych):
             # Dostalismy jeden zbior punktow materialnych a nie liste, wiec zrobmy jedno-elementowa liste
