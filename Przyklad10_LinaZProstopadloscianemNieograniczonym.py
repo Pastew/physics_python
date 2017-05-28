@@ -4,7 +4,7 @@ from Fizyka.MyMath import Wektor
 from Fizyka.UkladyPunktowMaterialnych import LinaZProstopadloscianemNieograniczonymWKierunkuZ
 
 ilosc = 20
-wspolczynnik_sprezystosci = 50
+wspolczynnik_sprezystosci = 200
 wspolczynnik_tlumienia = 0.2
 wspolczynnik_tlumienia_oscylacji = 1
 wspolczynnik_sztywnosci = 10

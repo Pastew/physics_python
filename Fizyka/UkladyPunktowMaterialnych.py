@@ -388,6 +388,24 @@ class Kula(ObszarZabroniony):
         return wynik
 
 
+class WalecNieograniczonyWKierunkuZ(ObszarZabroniony):
+    def __init__(self, wspolczynnik_odbicia, wspolczynnik_tarcia, srodek=Wektor(), promien=0.1):
+        super(WalecNieograniczonyWKierunkuZ, self).__init__(wspolczynnik_odbicia, wspolczynnik_tarcia)
+        self.srodek = srodek
+        self.promien = promien
+
+    def czy_w_obszarze_zabronionym(self, polozenie, poprzednie_polozenie, margines, normalna):
+        wektor_promienia = polozenie - self.srodek
+        wektor_promienia.z = 0
+        wynik = wektor_promienia.dlugosc() < self.promien + margines
+        if wynik and normalna is not None:
+            normalna = wektor_promienia
+            normalna.normuj()
+            return wynik, normalna
+
+        return wynik
+
+
 class ProstopadloscianNieograniczonyWKierunkuZ(ObszarZabroniony):
     def __init__(self, wspolczynnik_odbicia, wspolczynnik_tarcia, minX, maxX, minY, maxY):
         super(ProstopadloscianNieograniczonyWKierunkuZ, self).__init__(wspolczynnik_odbicia, wspolczynnik_tarcia)
@@ -443,8 +461,6 @@ class ProstopadloscianNieograniczonyWKierunkuZ(ObszarZabroniony):
                     normalna = Wektor(0, -1, 0)
                 else:
                     normalna = Wektor(0, 1, 0)
-
-            print(normalna)
 
             return wynik, normalna
 
@@ -512,4 +528,26 @@ class LinaZProstopadloscianemNieograniczonymWKierunkuZ(Lina):
                                                                                dlugosc)
 
         self.obszar_zabroniony = ProstopadloscianNieograniczonyWKierunkuZ(0, 0, -1, 1, -3.75, -0.25)
+        self.ustaw_wiezy(0, false)
+
+
+class LinaZWalcemNieograniczonymWKierunkuZ(Lina):
+    def __init__(self, ilosc,
+                 wspolczynnik_sprezystosci,
+                 wspolczynnik_tlumienia, wpolczynnik_tlumienia_oscylacji,
+                 wspolczynnik_sztywnosci,
+                 dlugosc):
+        super(LinaZWalcemNieograniczonymWKierunkuZ, self).__init__(ilosc,
+                                                                   wspolczynnik_sprezystosci,
+                                                                   wspolczynnik_tlumienia,
+                                                                   wpolczynnik_tlumienia_oscylacji,
+                                                                   wspolczynnik_sztywnosci,
+                                                                   dlugosc)
+
+        wspolczynnik_tarcia = 0.1
+        wspolczynnik_odbicia = 0.1
+        srodek_walca = Wektor(0.1, -3, -3)
+        promien = 1.0
+        self.obszar_zabroniony = WalecNieograniczonyWKierunkuZ(wspolczynnik_tarcia, wspolczynnik_odbicia,
+                                                               srodek_walca, promien)
         self.ustaw_wiezy(0, false)
