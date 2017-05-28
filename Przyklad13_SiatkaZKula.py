@@ -21,7 +21,6 @@ zpm = Siatka(nx, ny,
              dlugosc_x, dlugosc_y,
              obszar_zabroniony)
 
-
 sphere(pos=obszar_zabroniony.srodek.xyz(), radius=obszar_zabroniony.promien)
 symulacja = Symulacja([zpm], rysuj_linie=False)
 # symulacja.schowaj_punkty()
