@@ -135,7 +135,7 @@ class Oscylatory(ZbiorPunktowMaterialnych):
         return self.pobierz_punkt_materialny(0).polozenie * (-self.k)
 
 
-class OscylatorySprzezone(ZbiorPunktowMaterialnych):
+class OscylatorySprzezone(ZbiorPunktowMaterialnychZObszaremZabronionym):
     def __init__(self, ilosc,
                  wspolczynnik_sprezystosci,
                  wspolczynnik_tlumienia=0.0, wspolczynnik_tlumienia_oscylacji=0.0,
@@ -362,9 +362,11 @@ class Podloze(ObszarZabroniony):
         self.poziom_y = poziom_y
 
     def czy_w_obszarze_zabronionym(self, polozenie, poprzednie_polozenie, margines, normalna):
-        wynik = (polozenie + margines < self.poziom_y)
+        wynik = (polozenie.y + margines < self.poziom_y)
+
         if not normalna == None:
             normalna = Wektor(0, 1, 0)
+            return wynik, normalna
 
         return wynik
 
@@ -378,7 +380,6 @@ class Kula(ObszarZabroniony):
     def czy_w_obszarze_zabronionym(self, polozenie, poprzednie_polozenie, margines, normalna):
         wektor_promienia = polozenie - self.srodek
         wynik = wektor_promienia.dlugosc() < self.promien + margines
-
         if wynik and normalna is not None:
             normalna = wektor_promienia
             normalna.normuj()
@@ -431,4 +432,4 @@ class LinaZPodlozem2(Lina):
                                              wspolczynnik_sztywnosci,
                                              dlugosc)
 
-        self.obszar_zabroniony = Podloze(0, 0.1, poziom_podloza_y)
+        self.obszar_zabroniony = Podloze(0.1, 0.1, poziom_podloza_y)

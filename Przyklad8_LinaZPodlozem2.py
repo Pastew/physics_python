@@ -20,7 +20,7 @@ zpm.pobierz_punkt_materialny(zpm.ilosc - 1).ustaw_polozenie(Wektor(1.2, 0.3, -0.
 
 # Rysuj podloge
 box_height = 0.5
-box(pos=[0, poziom_podloza_y - 0.5 * box_height, 0], height=box_height, width=10, length=10)
+box(pos=[0, poziom_podloza_y -  box_height, 0], height=box_height, width=10, length=10)
 
 symulacja = Symulacja([zpm])
 # symulacja.schowaj_punkty()
