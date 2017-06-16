@@ -2,7 +2,7 @@ from Fizyka.Symulacja import Symulacja
 from Fizyka.UkladyPunktowMaterialnych import Lina
 
 ilosc = 10
-wspolczynnik_sprezystosci = 1000
+wspolczynnik_sprezystosci = 100
 wspolczynnik_tlumienia = 0.5
 wspolczynnik_tlumienia_oscylacji = 10
 wspolczynnik_sztywnosci = 1
